@@ -28,14 +28,20 @@ Both GIFs are copied from
 
 Robot demos appear directly below the abstract, without subset tabs. MIPO and
 humanoid have prominent cards, followed by both ANYmal GrandTour clips (EIG-1 and
-SNOW-2). MIPO's St. Mary clip and the ANYmal clips are available; the humanoid
-card uses the G1 SSIO/MACVO teaser.
+SNOW-2). The humanoid card contains both G1–MACVO (2×) and G1–LiDAR (8×).
+It is directly accessible at the `#demo-humanoid` anchor.
 
 The G1 teaser plays at 2× speed with “2×” and “Self-supervised with 1h data”
 burned into the top left and an SSIO (pink) / MACVO (blue) legend in a bottom
 strip. `video/G1-MACVO/make_teaser.py` renders it from the original screencast;
 the edited master is `video/G1-MACVO/ssio-macvo-teaser-2x.mp4`, and the website
 copy is `public/video/teaser.mp4`. Its poster is `public/video/teaser-poster.jpg`.
+
+The G1 LiDAR video is `public/video/G1-LiDAR/ssio-lidar-8x.mp4`, copied from
+the edited master in `video/G1-LiDAR/`. Its first 3 seconds are trimmed, its
+existing 8× playback is preserved, and its title and SSIO (yellow) / LiDAR (red)
+legend are burned into a bottom strip. The rendering script is
+`video/G1-LiDAR/make_lidar_demo.py`.
 
 The other source clips are in `video/MIPO-GPS/` and `video/ANYmal-GPS/`; the
 website copies use the same subfolders under `public/video/`. All clips are
@@ -54,7 +60,8 @@ frame from the same video as its poster. The full frame fits without cropping.
 | --- | --- | --- |
 | `teaser` | `teaser.mp4` | Title-page background (silent video loop) |
 | `intro` | `ssio_introduction.mp4` | Dark slider, "Introduction" |
-| `humanoid` | `teaser.mp4` | Main-page humanoid demo with playback controls |
+| `humanoidMacvo` | `teaser.mp4` | Main-page humanoid demo · G1–MACVO (2×) |
+| `humanoidLidar` | `G1-LiDAR/ssio-lidar-8x.mp4` | Main-page humanoid demo · G1–LiDAR (8×) |
 | `mipo` | `MIPO-GPS/st_mary_ssio_joints_3panel.mp4` | Main-page MIPO demo |
 | `grandtourEig1` | `ANYmal-GPS/EIG-1_final.mp4` | Main-page ANYmal demos |
 | `grandtourSnow2` | `ANYmal-GPS/SNOW-2_final.mp4` | Main-page ANYmal demos |

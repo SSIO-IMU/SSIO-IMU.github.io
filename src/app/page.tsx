@@ -16,7 +16,8 @@ import VideoSlot from '@/components/VideoSlot';
 const VIDEOS = {
   teaser: '/video/teaser.mp4',
   intro: null as string | null, // '/video/ssio_introduction.mp4'
-  humanoid: '/video/teaser.mp4',
+  humanoidMacvo: '/video/teaser.mp4',
+  humanoidLidar: '/video/G1-LiDAR/ssio-lidar-8x.mp4',
   mipo: '/video/MIPO-GPS/st_mary_ssio_joints_3panel.mp4',
   grandtourEig1: '/video/ANYmal-GPS/EIG-1_final.mp4',
   grandtourSnow2: '/video/ANYmal-GPS/SNOW-2_final.mp4',
@@ -55,7 +56,10 @@ const demos: Demo[] = [
     name: 'Humanoid',
     logo: '/images/logos/Humanoid_logo.png',
     platform: 'Unitree G1',
-    videos: [{ src: VIDEOS.humanoid, label: 'Humanoid motion' }],
+    videos: [
+      { src: VIDEOS.humanoidMacvo, label: 'G1–MACVO · 2×' },
+      { src: VIDEOS.humanoidLidar, label: 'G1–LiDAR · 8×' },
+    ],
   },
   {
     embodiment: 'grandtour',
@@ -254,6 +258,7 @@ export default function HomePage() {
             {demos.map((demo) => (
               <article
                 key={demo.embodiment}
+                id={`demo-${demo.embodiment}`}
                 className={clsx(
                   'rounded-2xl bg-white p-4 shadow-sm md:p-6',
                   demo.videos.length > 1 && 'md:col-span-2'
