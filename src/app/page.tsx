@@ -40,7 +40,7 @@ type Demo = {
   name: string;
   logo: string;
   platform: string;
-  videos: { src: string | null; label: string }[];
+  videos: { src: string | null; label: string; width: number; height: number }[];
 };
 
 const demos: Demo[] = [
@@ -49,7 +49,7 @@ const demos: Demo[] = [
     name: 'MIPO',
     logo: '/images/logos/MIPO_logo.png',
     platform: 'Unitree Go1',
-    videos: [{ src: VIDEOS.mipo, label: 'St. Mary' }],
+    videos: [{ src: VIDEOS.mipo, label: 'St. Mary', width: 1642, height: 900 }],
   },
   {
     embodiment: 'humanoid',
@@ -57,8 +57,8 @@ const demos: Demo[] = [
     logo: '/images/logos/Humanoid_logo.png',
     platform: 'Unitree G1',
     videos: [
-      { src: VIDEOS.humanoidMacvo, label: 'G1–MACVO · 2×' },
-      { src: VIDEOS.humanoidLidar, label: 'G1–LiDAR · 8×' },
+      { src: VIDEOS.humanoidMacvo, label: 'G1–MACVO · 2×', width: 2478, height: 1190 },
+      { src: VIDEOS.humanoidLidar, label: 'G1–LiDAR · 8×', width: 2484, height: 1464 },
     ],
   },
   {
@@ -67,8 +67,8 @@ const demos: Demo[] = [
     logo: '/images/logos/ANYmal_logo.png',
     platform: 'ANYmal',
     videos: [
-      { src: VIDEOS.grandtourEig1, label: 'EIG-1' },
-      { src: VIDEOS.grandtourSnow2, label: 'SNOW-2' },
+      { src: VIDEOS.grandtourEig1, label: 'EIG-1', width: 1464, height: 900 },
+      { src: VIDEOS.grandtourSnow2, label: 'SNOW-2', width: 1950, height: 900 },
     ],
   },
 ];
@@ -139,16 +139,6 @@ export default function HomePage() {
     {
       title: 'Introduction',
       content: <VideoSlot src={VIDEOS.intro} label='SSIO introduction' />,
-    },
-    {
-      title: 'Six Datasets, One Recipe',
-      content: (
-        <img
-          src='/images/fig1_corrected_legend.png'
-          alt='Trajectories on six datasets: self-supervised model against the supervised AirIO baseline'
-          className='mx-auto w-full rounded-md bg-white p-2'
-        />
-      ),
     },
   ];
   const sliderRef = useRef<HTMLDivElement | null>(null);
@@ -240,6 +230,19 @@ export default function HomePage() {
             A new embodiment then requires no motion capture, RTK, or SLAM ground truth, only unlabeled IMU recorded on the platform during normal operation.
             Across six datasets spanning pedestrians, drones, quadrupeds, and a humanoid, the same recipe applied unchanged trains inertial odometry comparable to a supervised AirIO baseline.
           </p>
+          <figure className='mt-8'>
+            <figcaption className='mb-4 text-center text-2xl font-semibold'>
+              Six Datasets, One Recipe
+            </figcaption>
+            <img
+              src='/images/fig1_corrected_legend.png'
+              alt='Trajectories on six datasets: self-supervised model against the supervised AirIO baseline'
+              width={2400}
+              height={1000}
+              loading='lazy'
+              className='mx-auto h-auto w-full rounded-md bg-white p-2'
+            />
+          </figure>
         </div>
       </section>
 
@@ -273,10 +276,22 @@ export default function HomePage() {
                     <TrainingDataLabel embodiment={demo.embodiment} />
                   </div>
                 </div>
-                <div className={clsx('grid gap-6', demo.videos.length > 1 && 'md:grid-cols-2')}>
+                <div
+                  className='grid gap-6 md:grid-cols-[var(--video-columns)]'
+                  style={{
+                    '--video-columns': demo.videos
+                      .map(({ width, height }) => `minmax(0, ${width / height}fr)`)
+                      .join(' '),
+                  } as React.CSSProperties}
+                >
                   {demo.videos.map((video) => (
                     <figure key={video.label}>
-                      <VideoSlot src={video.src} label={`${demo.name} · ${video.label}`} />
+                      <VideoSlot
+                        src={video.src}
+                        label={`${demo.name} · ${video.label}`}
+                        width={video.width}
+                        height={video.height}
+                      />
                       {video.src !== null && (
                         <figcaption className='pt-2 text-sm text-gray-500'>
                           {video.label}

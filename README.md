@@ -26,10 +26,12 @@ Both GIFs are copied from
 
 ## Videos
 
-Robot demos appear directly below the abstract, without subset tabs. MIPO and
-humanoid have prominent cards, followed by both ANYmal GrandTour clips (EIG-1 and
-SNOW-2). The humanoid card contains both G1–MACVO (2×) and G1–LiDAR (8×).
-It is directly accessible at the `#demo-humanoid` anchor.
+Robot demos follow the abstract and “Six Datasets, One Recipe” figure, without
+subset tabs. MIPO and humanoid have prominent cards, followed by both ANYmal
+GrandTour clips (EIG-1 and SNOW-2). The humanoid card contains both G1–MACVO (2×)
+and G1–LiDAR (8×). It is directly accessible at the `#demo-humanoid` anchor.
+Paired videos share a height on tablet and desktop, with widths proportional to
+their native aspect ratios. They stack at full width on mobile without cropping.
 
 The G1 teaser plays at 2× speed with “2×” and “Self-supervised with 1h data”
 burned into the top left and an SSIO (pink) / MACVO (blue) legend in a bottom
@@ -51,7 +53,8 @@ H.264 MP4s with fast-start metadata.
 
 Put each mp4 under `public/video/`, then set its path in the `VIDEOS` table at the
 top of `src/app/page.tsx` (null = coming soon) and rebuild. The `demos` array
-controls the visible cards. `trainingDurations` holds confirmed self-supervised
+controls the visible cards and records each clip's native width and height for
+the proportional layout. `trainingDurations` holds confirmed self-supervised
 training durations: humanoid uses **1 h** of unlabeled data. Other durations are
 pending confirmation and are omitted from the page; total dataset durations
 include held-out recordings and must not be used as training durations.

@@ -5,11 +5,13 @@ type VideoSlotProp = {
   // null renders a placeholder box; set a /video/... path once the clip exists.
   src: string | null;
   label: string;
+  width?: number;
+  height?: number;
   className?: string;
   controls?: boolean;
 };
 
-const VideoSlot = ({ src, label, className, controls = true }: VideoSlotProp) => {
+const VideoSlot = ({ src, label, width, height, className, controls = true }: VideoSlotProp) => {
   if (src === null) {
     return (
       <div
@@ -31,7 +33,9 @@ const VideoSlot = ({ src, label, className, controls = true }: VideoSlotProp) =>
       loop
       playsInline
       controls={controls}
-      className={clsx('mx-auto w-full rounded-md shadow-sm', className)}
+      width={width}
+      height={height}
+      className={clsx('mx-auto h-auto w-full rounded-md shadow-sm', className)}
     >
       <source src={src} type='video/mp4' />
       Your browser does not support the video tag.
