@@ -22,18 +22,16 @@ def main():
 
     # The screencast is already at 8x: only reset timestamps after the trim.
     # Its plot legend identifies yellow "pred" and red "odom".
-    # Put the title and legend below the complete recording, without covering it.
+    # Keep the training label at top left and the legend below the recording.
     filters = [
         "setpts=PTS-STARTPTS",
         "fps=60",
-        "pad=ceil(iw/2)*2:ceil(ih/2)*2+160:0:0:color=black",
+        "pad=ceil(iw/2)*2:ceil(ih/2)*2+96:0:0:color=black",
         f"drawtext=fontfile='{font}':text='8×':fontsize=64:fontcolor=white:"
         "x=40:y=48:box=1:boxcolor=black@0.75:boxborderw=16",
         f"drawtext=fontfile='{font}':text='Self-supervised with 1h data':"
         "fontsize=48:fontcolor=white:x=40:y=144:"
         "box=1:boxcolor=black@0.75:boxborderw=16",
-        f"drawtext=fontfile='{font}':text='Self-supervised with 1h data':"
-        "fontsize=48:fontcolor=white:x=(w-text_w)/2:y=h-120-text_h/2",
         "drawbox=x=iw/2-310:y=ih-51:w=84:h=6:color=0xFFFF00:t=fill",
         f"drawtext=fontfile='{font}':text='SSIO':fontsize=48:fontcolor=white:"
         "x=w/2-208:y=h-48-text_h/2",

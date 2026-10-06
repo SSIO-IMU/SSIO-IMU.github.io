@@ -28,8 +28,7 @@ Both GIFs are copied from
 
 Robot demos appear directly below the abstract, without subset tabs. MIPO and
 humanoid have prominent cards, followed by both ANYmal GrandTour clips (EIG-1 and
-SNOW-2). The humanoid card contains both G1–MACVO (2×) and G1–LiDAR (8×),
-with the 1 h self-supervised training duration shown under each clip.
+SNOW-2). The humanoid card contains both G1–MACVO (2×) and G1–LiDAR (8×).
 It is directly accessible at the `#demo-humanoid` anchor.
 
 The G1 teaser plays at 2× speed with “2×” and “Self-supervised with 1h data”
@@ -42,7 +41,7 @@ The G1 LiDAR video is `public/video/G1-LiDAR/ssio-lidar-8x.mp4`, copied from
 the edited master in `video/G1-LiDAR/`. Its first 3 seconds are trimmed, its
 existing 8× playback is preserved, and “Self-supervised with 1h data” is burned
 in beneath the top-left 8× marker so playback controls cannot cover it.
-Its title and SSIO (yellow) / LiDAR (red) legend remain in a bottom strip.
+Only the SSIO (yellow) / LiDAR (red) legend appears in the bottom strip.
 The rendering script is
 `video/G1-LiDAR/make_lidar_demo.py`.
 
