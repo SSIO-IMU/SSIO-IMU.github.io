@@ -280,6 +280,11 @@ export default function HomePage() {
                       {video.src !== null && (
                         <figcaption className='pt-2 text-sm text-gray-500'>
                           {video.label}
+                          {trainingDurations[demo.embodiment] && (
+                            <span className='block font-semibold text-primary-700'>
+                              Self-supervised with {trainingDurations[demo.embodiment]} of data
+                            </span>
+                          )}
                         </figcaption>
                       )}
                     </figure>

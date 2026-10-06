@@ -30,6 +30,9 @@ def main():
         f"drawtext=fontfile='{font}':text='8×':fontsize=64:fontcolor=white:"
         "x=40:y=48:box=1:boxcolor=black@0.75:boxborderw=16",
         f"drawtext=fontfile='{font}':text='Self-supervised with 1h data':"
+        "fontsize=48:fontcolor=white:x=40:y=144:"
+        "box=1:boxcolor=black@0.75:boxborderw=16",
+        f"drawtext=fontfile='{font}':text='Self-supervised with 1h data':"
         "fontsize=48:fontcolor=white:x=(w-text_w)/2:y=h-120-text_h/2",
         "drawbox=x=iw/2-310:y=ih-51:w=84:h=6:color=0xFFFF00:t=fill",
         f"drawtext=fontfile='{font}':text='SSIO':fontsize=48:fontcolor=white:"
