@@ -18,13 +18,14 @@ const VideoSlot = ({ src, label, className, controls = true }: VideoSlotProp) =>
           className
         )}
       >
-        <span className='text-sm font-semibold uppercase tracking-wider'>Video placeholder</span>
+        <span className='text-sm font-semibold uppercase tracking-wider'>Video coming soon</span>
         <span className='mt-1 text-sm opacity-70'>{label}</span>
       </div>
     );
   }
   return (
     <video
+      aria-label={label}
       autoPlay
       muted
       loop

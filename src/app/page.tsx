@@ -1,63 +1,112 @@
 'use client';
 
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '@/lib/env';
 
 import Figure from '@/components/Figure';
 import KatexSpan from '@/components/KaTeX';
 import ArrowLink from '@/components/links/ArrowLink';
 import UnderlineLink from '@/components/links/UnderlineLink';
+import TLIOScaling from '@/components/TLIOScaling';
 import VideoSlot from '@/components/VideoSlot';
 
 // Video paths under public/. null renders a placeholder; set the path once the mp4 exists.
 const VIDEOS = {
-  teaser: null as string | null, // '/video/teaser.mp4'
+  teaser: '/video/teaser.mp4',
   intro: null as string | null, // '/video/ssio_introduction.mp4'
-  tlio: null as string | null, // '/video/traj_tlio.mp4'
-  humanoid: null as string | null, // '/video/traj_humanoid_g1.mp4'
-  mipo: null as string | null, // '/video/traj_mipo_go1.mp4'
-  grandtour: null as string | null, // '/video/traj_grandtour_anymal.mp4'
-  blackbird: null as string | null, // '/video/traj_blackbird.mp4'
-  euroc: null as string | null, // '/video/traj_euroc.mp4'
+  humanoid: '/video/teaser.mp4',
+  mipo: '/video/MIPO-GPS/st_mary_ssio_joints_3panel.mp4',
+  grandtourEig1: '/video/ANYmal-GPS/EIG-1_final.mp4',
+  grandtourSnow2: '/video/ANYmal-GPS/SNOW-2_final.mp4',
 };
 
-type Dataset = {
+type Embodiment = 'mipo' | 'humanoid' | 'grandtour' | 'tlio' | 'blackbird';
+
+// Training durations only; total dataset durations include held-out recordings.
+// Fill the remaining durations when the training splits are confirmed.
+const trainingDurations: Record<Embodiment, string | null> = {
+  mipo: null,
+  humanoid: '1 h',
+  grandtour: null,
+  tlio: null,
+  blackbird: null,
+};
+
+type Demo = {
+  embodiment: Embodiment;
   name: string;
   logo: string;
   platform: string;
-  stats: string;
-  video: string | null;
-  videoFile: string;
+  videos: { src: string | null; label: string }[];
 };
 
-// Dataset statistics from Tab. I of the paper.
-const trajectoryGroups: { title: string; blurb: string; datasets: Dataset[] }[] = [
+const demos: Demo[] = [
   {
-    title: 'Human & Humanoid',
-    blurb: 'Pedestrian motion from a head-mounted IMU, and a Unitree G1 humanoid.',
-    datasets: [
-      { name: 'TLIO', logo: '/images/logos/TLIO_logo.png', platform: 'Pedestrian', stats: '31.6 h · 42.3 km · max 6.0 m/s', video: VIDEOS.tlio, videoFile: 'traj_tlio.mp4' },
-      { name: 'Humanoid', logo: '/images/logos/Humanoid_logo.png', platform: 'Unitree G1', stats: '1.31 h · 1.9 km · max 3.9 m/s', video: VIDEOS.humanoid, videoFile: 'traj_humanoid_g1.mp4' },
-    ],
+    embodiment: 'mipo',
+    name: 'MIPO',
+    logo: '/images/logos/MIPO_logo.png',
+    platform: 'Unitree Go1',
+    videos: [{ src: VIDEOS.mipo, label: 'St. Mary' }],
   },
   {
-    title: 'Legged Robots',
-    blurb: 'A Unitree Go1 running fast gaits indoors, and an ANYmal on in-the-wild outdoor terrain.',
-    datasets: [
-      { name: 'MIPO', logo: '/images/logos/MIPO_logo.png', platform: 'Unitree Go1', stats: '58.6 min · 1.4 km · max 6.6 m/s', video: VIDEOS.mipo, videoFile: 'traj_mipo_go1.mp4' },
-      { name: 'GrandTour', logo: '/images/logos/ANYmal_logo.png', platform: 'ANYmal', stats: '5.65 h · 10.3 km · max 1.5 m/s', video: VIDEOS.grandtour, videoFile: 'traj_grandtour_anymal.mp4' },
-    ],
+    embodiment: 'humanoid',
+    name: 'Humanoid',
+    logo: '/images/logos/Humanoid_logo.png',
+    platform: 'Unitree G1',
+    videos: [{ src: VIDEOS.humanoid, label: 'Humanoid motion' }],
   },
   {
-    title: 'Racing Drone',
-    blurb: 'Aggressive racing-drone flight up to 8.7 m/s, and micro aerial vehicle flight.',
-    datasets: [
-      { name: 'Blackbird', logo: '/images/logos/BlackBird_logo.png', platform: 'Racing drone', stats: '5.0 h · 28.4 km · max 8.7 m/s', video: VIDEOS.blackbird, videoFile: 'traj_blackbird.mp4' },
-      { name: 'EuRoC', logo: '/images/logos/EuRoC_logo.png', platform: 'Micro aerial vehicle', stats: '22.5 min · 892 m · max 2.9 m/s', video: VIDEOS.euroc, videoFile: 'traj_euroc.mp4' },
+    embodiment: 'grandtour',
+    name: 'GrandTour',
+    logo: '/images/logos/ANYmal_logo.png',
+    platform: 'ANYmal',
+    videos: [
+      { src: VIDEOS.grandtourEig1, label: 'EIG-1' },
+      { src: VIDEOS.grandtourSnow2, label: 'SNOW-2' },
     ],
   },
 ];
+
+const trajectoryGallery: {
+  embodiment: Embodiment;
+  name: string;
+  platform: string;
+  image: string;
+  alt: string;
+}[] = [
+  {
+    embodiment: 'mipo',
+    name: 'MIPO',
+    platform: 'Unitree Go1',
+    image: '/images/mipo_SSL_fig.png',
+    alt: 'MIPO: 2D trajectories and velocity components for ST-sq5, T-Vis, FyT-04, and T-048. Ground truth is compared with self-supervision, with and without proprioceptive input.',
+  },
+  {
+    embodiment: 'tlio',
+    name: 'TLIO',
+    platform: 'Pedestrian',
+    image: '/images/tlio_ssl_trajectories.png',
+    alt: 'TLIO: 2D trajectories and velocity components for three pedestrian sequences, comparing self-supervision with ground truth.',
+  },
+  {
+    embodiment: 'blackbird',
+    name: 'Blackbird',
+    platform: 'Racing drone',
+    image: '/images/bb_ssl_trajectories.png',
+    alt: 'Blackbird: 2D trajectories and velocity components for TiltedThrice, Star, and Patrick, comparing self-supervision with ground truth.',
+  },
+];
+
+function TrainingDataLabel({ embodiment }: { embodiment: Embodiment }) {
+  const duration = trainingDurations[embodiment];
+  return (
+    <p className='text-sm font-semibold text-primary-700'>
+      Self-supervised{duration ? ` · ${duration} of unlabeled data` : ' · Unlabeled data'}
+    </p>
+  );
+}
 
 // [AVE (m/s), ATE (m)] per dataset from Tab. II of the paper; null = error too large to report.
 const resultDatasets = ['TLIO', 'EuRoC', 'Blackbird', 'MIPO', 'GrandTour', 'Humanoid'];
@@ -73,7 +122,7 @@ const resultRows: { method: string; ours: boolean; cells: [string, string][] }[]
 export default function HomePage() {
   const textColor = 'text-gray-600';
   const bgColor = 'bg-white';
-  const maskColor = 'bg-stone-300/70';
+  const maskColor = 'bg-white/75';
   const secondaryBgColor = 'bg-gray-100';
   const hlTextColor = 'text-primary-600';
   const linkIconClass = 'h-6 w-6 shrink-0';
@@ -85,7 +134,7 @@ export default function HomePage() {
   const sliderItems: { title: string; content: React.ReactNode }[] = [
     {
       title: 'Introduction',
-      content: <VideoSlot src={VIDEOS.intro} label='public/video/ssio_introduction.mp4' />,
+      content: <VideoSlot src={VIDEOS.intro} label='SSIO introduction' />,
     },
     {
       title: 'Six Datasets, One Recipe',
@@ -99,8 +148,6 @@ export default function HomePage() {
     },
   ];
   const sliderRef = useRef<HTMLDivElement | null>(null);
-  const [groupIdx, setGroupIdx] = useState(0);
-  const group = trajectoryGroups[groupIdx];
 
   useEffect(() => {
     const slider = sliderRef.current;
@@ -112,27 +159,48 @@ export default function HomePage() {
 
   return (
     <main>
-      <section className={clsx(bgColor, textColor, 'relative flex items-center justify-center h-screen overflow-hidden')}>
-        <div className='layout z-20 relative flex min-h-screen flex-col items-center justify-center p-4 text-center'>
+      <section className={clsx(bgColor, textColor, 'relative flex min-h-screen items-center justify-center overflow-hidden')}>
+        {VIDEOS.teaser === null ? (
+          <img
+            src='/images/fig1_corrected_legend.png'
+            alt=''
+            aria-hidden='true'
+            className='pointer-events-none absolute inset-0 z-0 h-full w-full object-contain'
+          />
+        ) : (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden='true'
+            poster='/video/teaser-poster.jpg'
+            className='pointer-events-none absolute inset-0 z-0 h-full w-full object-contain'
+          >
+            <source src={VIDEOS.teaser} type='video/mp4' />
+          </video>
+        )}
+        <div className={clsx('pointer-events-none absolute inset-0 z-10', maskColor)} />
+        <div className='layout z-20 relative flex flex-col items-center justify-center px-4 py-12 text-center'>
           <h1 className='mt-4 text-5xl mb-4'>
             <span className={hlTextColor}>S</span>elf-<span className={hlTextColor}>S</span>upervised{' '}
             <span className={hlTextColor}>I</span>nertial <span className={hlTextColor}>O</span>dometry
           </h1>
           <div className='container pb-6'>
             <span className='text-lg'>
-              <UnderlineLink href='https://haleqiu.github.io/'>Yuheng Qiu</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
-              <UnderlineLink href='https://www.yutianchen.blog/'>Yutian Chen</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
+              <UnderlineLink href='https://haleqiu.github.io/' className='font-normal'>Yuheng Qiu</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
+              <UnderlineLink href='https://www.yutianchen.blog/' className='font-normal'>Yutian Chen</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
               Carlton Cort<span className='align-super text-sm'>2</span>, &nbsp;
               Weison Huang<span className='align-super text-sm'>2</span>, &nbsp;
               Shibo Zhao<span className='align-super text-sm'>1</span>, <br />
-              <UnderlineLink href='https://people.eecs.berkeley.edu/~pabbeel/'>Pieter Abbeel</UnderlineLink><span className='align-super text-sm'>†1,3</span>, &nbsp;
-              Rocky Duan<span className='align-super text-sm'>†1</span>, &nbsp;
-              Koushil Sreenath<span className='align-super text-sm'>†1,3</span>, &nbsp;
-              C. Karen Liu<span className='align-super text-sm'>†1,4</span>, &nbsp;
-              <UnderlineLink href='https://sferrazza.cc/'>Carmelo Sferrazza</UnderlineLink><span className='align-super text-sm'>†1</span>, <br />
+              <UnderlineLink href='https://people.eecs.berkeley.edu/~pabbeel/' className='font-normal'>Pieter Abbeel</UnderlineLink><span className='align-super text-sm'>1,3</span>, &nbsp;
+              Rocky Duan<span className='align-super text-sm'>1</span>, &nbsp;
+              Koushil Sreenath<span className='align-super text-sm'>1,3</span>, &nbsp;
+              C. Karen Liu<span className='align-super text-sm'>1,4</span>, &nbsp;
+              <UnderlineLink href='https://sferrazza.cc/' className='font-normal'>Carmelo Sferrazza</UnderlineLink><span className='align-super text-sm'>1</span>, <br />
               Junyi Geng<span className='align-super text-sm'>5</span>, &nbsp;
-              <UnderlineLink href='https://theairlab.org/team/sebastian/'>Sebastian Scherer</UnderlineLink><span className='align-super text-sm'>2</span>, &nbsp;
-              <UnderlineLink href='https://www.gshi.me/'>Guanya Shi</UnderlineLink><span className='align-super text-sm'>†1,2</span>
+              <UnderlineLink href='https://theairlab.org/team/sebastian/' className='font-normal'>Sebastian Scherer</UnderlineLink><span className='align-super text-sm'>2</span>, &nbsp;
+              <UnderlineLink href='https://www.gshi.me/' className='font-normal'>Guanya Shi</UnderlineLink><span className='align-super text-sm'>1,2</span>
             </span>
           </div>
           <div className='container flex flex-row items-center space-x-8 justify-center text-lg'>
@@ -148,22 +216,11 @@ export default function HomePage() {
               GitHub Repo
             </ArrowLink>
           </div>
-        </div>
-        <div className={clsx('absolute w-auto min-w-full min-h-full max-w-none z-10', maskColor)} />
-        <div className='absolute bottom-4 left-4 z-20 text-sm'>
-          <p><span className='align-super text-xs'>1</span>Amazon FAR &nbsp;<span className='align-super text-xs'>2</span>Carnegie Mellon University &nbsp;<span className='align-super text-xs'>3</span>UC Berkeley</p>
-          <p><span className='align-super text-xs'>4</span>Stanford University &nbsp;<span className='align-super text-xs'>5</span>Penn State University &nbsp;<span className='align-super text-xs'>†</span>Amazon FAR team co-lead</p>
-        </div>
-        {VIDEOS.teaser === null ? (
-          <div className='absolute bottom-4 right-4 z-20 rounded border border-dashed border-gray-500 px-3 py-1 text-sm'>
-            Teaser video placeholder
+          <div className='mt-6 text-sm'>
+            <p><span className='align-super text-xs'>1</span>Amazon FAR &nbsp;<span className='align-super text-xs'>2</span>Carnegie Mellon University &nbsp;<span className='align-super text-xs'>3</span>UC Berkeley</p>
+            <p><span className='align-super text-xs'>4</span>Stanford University &nbsp;<span className='align-super text-xs'>5</span>Penn State University</p>
           </div>
-        ) : (
-          <video autoPlay loop muted playsInline className='absolute inset-0 w-full h-full z-0 object-cover object-top'>
-            <source src={VIDEOS.teaser} type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
-        )}
+        </div>
       </section>
 
       <section className={clsx(bgColor, textColor)}>
@@ -179,6 +236,53 @@ export default function HomePage() {
             A new embodiment then requires no motion capture, RTK, or SLAM ground truth, only unlabeled IMU recorded on the platform during normal operation.
             Across six datasets spanning pedestrians, drones, quadrupeds, and a humanoid, the same recipe applied unchanged trains inertial odometry comparable to a supervised AirIO baseline.
           </p>
+        </div>
+      </section>
+
+      <section
+        id='robot-demos'
+        aria-labelledby='robot-demos-title'
+        className={clsx(secondaryBgColor, textColor)}
+      >
+        <div className='layout py-12'>
+          <h2 id='robot-demos-title' className='mb-4'>Self-Supervised Odometry in Motion</h2>
+          <p className='pb-6 text-lg'>
+            Learning from unlabeled motion on quadrupeds and a humanoid,
+            without velocity or position labels.
+          </p>
+          <div className='grid grid-cols-1 items-start gap-6 md:grid-cols-2'>
+            {demos.map((demo) => (
+              <article
+                key={demo.embodiment}
+                className={clsx(
+                  'rounded-2xl bg-white p-4 shadow-sm md:p-6',
+                  demo.videos.length > 1 && 'md:col-span-2'
+                )}
+              >
+                <div className='flex items-center gap-3 pb-4'>
+                  <img src={demo.logo} alt='' className='h-12 w-12 object-contain' />
+                  <div>
+                    <h3 className='text-xl text-gray-800'>
+                      {demo.name} <span className='font-normal text-gray-500'>· {demo.platform}</span>
+                    </h3>
+                    <TrainingDataLabel embodiment={demo.embodiment} />
+                  </div>
+                </div>
+                <div className={clsx('grid gap-6', demo.videos.length > 1 && 'md:grid-cols-2')}>
+                  {demo.videos.map((video) => (
+                    <figure key={video.label}>
+                      <VideoSlot src={video.src} label={`${demo.name} · ${video.label}`} />
+                      {video.src !== null && (
+                        <figcaption className='pt-2 text-sm text-gray-500'>
+                          {video.label}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -204,48 +308,64 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={clsx(secondaryBgColor, textColor)}>
+      <section
+        id='trajectory-gallery'
+        aria-labelledby='trajectory-gallery-title'
+        className={clsx(secondaryBgColor, textColor)}
+      >
         <div className='layout py-12'>
-          <h2 className='mb-4'>Trajectories Across Embodiments</h2>
+          <h2 id='trajectory-gallery-title' className='mb-4'>Traj Gallery</h2>
           <p className='text-lg pb-6'>
-            One recipe, applied unchanged and trained from random initialization on each dataset,
-            with <span className={hlTextColor}>no velocity or position labels</span>.
+            2D trajectories and velocity components compared with ground truth.
+            Each model is trained from scratch with <span className={hlTextColor}>no velocity or position labels</span>.
           </p>
-          <div className='flex flex-wrap gap-2 pb-4' role='tablist' aria-label='Embodiment group'>
-            {trajectoryGroups.map((g, i) => (
-              <button
-                key={g.title}
-                role='tab'
-                aria-selected={groupIdx === i}
-                onClick={() => setGroupIdx(i)}
-                className={clsx(
-                  'rounded-full border px-5 py-2 font-semibold transition',
-                  groupIdx === i
-                    ? 'border-primary-600 bg-primary-600 text-white'
-                    : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
-                )}
-              >
-                {g.title}
-              </button>
-            ))}
-          </div>
-          <p className='pb-4 italic'>{group.blurb}</p>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6' role='tabpanel'>
-            {group.datasets.map((d) => (
-              <article key={d.name} className='rounded-2xl bg-white p-4 shadow-sm'>
-                <div className='flex items-center gap-3 pb-3'>
-                  <img src={d.logo} alt='' className='h-10 w-10 object-contain' />
-                  <div>
-                    <div className='text-lg font-semibold text-gray-800'>
-                      {d.name} <span className='font-normal text-gray-500'>· {d.platform}</span>
-                    </div>
-                    <div className='text-sm text-gray-500'>{d.stats}</div>
-                  </div>
-                </div>
-                <VideoSlot src={d.video} label={`public/video/${d.videoFile}`} />
-              </article>
-            ))}
-          </div>
+          <TabGroup>
+            <TabList aria-label='Trajectory datasets' className='mb-6 flex flex-wrap gap-2'>
+              {trajectoryGallery.map((item) => (
+                <Tab
+                  key={item.embodiment}
+                  className={({ selected }) => clsx(
+                    'rounded-full border px-5 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                    selected
+                      ? 'border-primary-600 bg-primary-600 text-white'
+                      : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
+                  )}
+                >
+                  {item.name}
+                </Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {trajectoryGallery.map((item) => (
+                <TabPanel key={item.embodiment}>
+                  <figure className='rounded-2xl bg-white p-4 shadow-sm md:p-6'>
+                    <figcaption className='mb-4 flex flex-wrap items-baseline justify-between gap-2'>
+                      <h3 className='text-xl text-gray-800'>
+                        {item.name} <span className='font-normal text-gray-500'>· {item.platform}</span>
+                      </h3>
+                      <TrainingDataLabel embodiment={item.embodiment} />
+                    </figcaption>
+                    <a
+                      href={item.image}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label={`Open ${item.name} trajectory and velocity plots at full resolution`}
+                      className='block rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600'
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.alt}
+                        width={2400}
+                        height={1350}
+                        loading='lazy'
+                        className='h-auto w-full'
+                      />
+                    </a>
+                  </figure>
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </TabGroup>
         </div>
       </section>
 
@@ -298,6 +418,8 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <TLIOScaling />
 
       <section className={clsx(secondaryBgColor, textColor)}>
         <div className='layout py-12'>

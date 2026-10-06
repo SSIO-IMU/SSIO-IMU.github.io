@@ -12,27 +12,67 @@ corepack pnpm build    # static export into docs/ (commit docs/)
 
 GitHub Pages: Settings → Pages → Deploy from branch `main`, folder `/docs`.
 
+## TLIO scaling visualization
+
+The section after the results table supports day and night modes, animated GIFs,
+and a final-frame view. Reduced-motion preferences select the static frame.
+The component is `src/components/TLIOScaling.tsx`; its assets are in
+`public/images/scaling/`.
+
+Both GIFs are copied from
+`IMUnet/MACIO_Pipeline2/Doc/figure_scaling/render/gifs/`:
+`scaling_law_one_by_one_clean_2x.gif` for day mode and the same filename under
+`transparent_dark/` for night mode. The PNGs are their final frames.
+
 ## Videos
 
-Every video is a placeholder. Put the mp4 under `public/video/`, then set its path in
-the `VIDEOS` table at the top of `src/app/page.tsx` (null = placeholder) and rebuild.
+Robot demos appear directly below the abstract, without subset tabs. MIPO and
+humanoid have prominent cards, followed by both ANYmal GrandTour clips (EIG-1 and
+SNOW-2). MIPO's St. Mary clip and the ANYmal clips are available; the humanoid
+card uses the G1 SSIO/MACVO teaser.
+
+The G1 teaser plays at 2× speed with “2×” and “Self-supervised with 1h data”
+burned into the top left and an SSIO (pink) / MACVO (blue) legend in a bottom
+strip. `video/G1-MACVO/make_teaser.py` renders it from the original screencast;
+the edited master is `video/G1-MACVO/ssio-macvo-teaser-2x.mp4`, and the website
+copy is `public/video/teaser.mp4`. Its poster is `public/video/teaser-poster.jpg`.
+
+The other source clips are in `video/MIPO-GPS/` and `video/ANYmal-GPS/`; the
+website copies use the same subfolders under `public/video/`. All clips are
+H.264 MP4s with fast-start metadata.
+
+Put each mp4 under `public/video/`, then set its path in the `VIDEOS` table at the
+top of `src/app/page.tsx` (null = coming soon) and rebuild. The `demos` array
+controls the visible cards. `trainingDurations` holds confirmed self-supervised
+training durations: humanoid uses **1 h** of unlabeled data. Other durations are
+pending confirmation and are omitted from the page; total dataset durations
+include held-out recordings and must not be used as training durations.
+The title-page background plays the teaser beneath a light overlay, using a
+frame from the same video as its poster. The full frame fits without cropping.
 
 | Key | File | Where |
 | --- | --- | --- |
-| `teaser` | `teaser.mp4` | Hero background (silent loop) |
+| `teaser` | `teaser.mp4` | Title-page background (silent video loop) |
 | `intro` | `ssio_introduction.mp4` | Dark slider, "Introduction" |
-| `tlio` | `traj_tlio.mp4` | Human & Humanoid |
-| `humanoid` | `traj_humanoid_g1.mp4` | Human & Humanoid |
-| `mipo` | `traj_mipo_go1.mp4` | Legged Robots |
-| `grandtour` | `traj_grandtour_anymal.mp4` | Legged Robots |
-| `blackbird` | `traj_blackbird.mp4` | Racing Drone |
-| `euroc` | `traj_euroc.mp4` | Racing Drone |
+| `humanoid` | `teaser.mp4` | Main-page humanoid demo with playback controls |
+| `mipo` | `MIPO-GPS/st_mary_ssio_joints_3panel.mp4` | Main-page MIPO demo |
+| `grandtourEig1` | `ANYmal-GPS/EIG-1_final.mp4` | Main-page ANYmal demos |
+| `grandtourSnow2` | `ANYmal-GPS/SNOW-2_final.mp4` | Main-page ANYmal demos |
 
 Transcode for the web:
 
 ```bash
 ffmpeg -i input.mov -an -vcodec libx264 -pix_fmt yuv420p -crf 24 -movflags +faststart public/video/teaser.mp4
 ```
+
+## Trajectory gallery
+
+“Traj Gallery” displays the existing MIPO, TLIO, and Blackbird figures in
+clickable dataset tabs, with MIPO selected initially. The tabs also support
+keyboard navigation. Each section shows only 2D trajectories and velocity
+components, including the original legends and scale bars. Each image opens at
+full resolution. The `trajectoryGallery` array in `src/app/page.tsx` defines the
+entries; images remain in `public/images/`.
 
 ## TODO
 
