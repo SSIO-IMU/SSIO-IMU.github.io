@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 
+import ExpandableImage from "@/components/ExpandableImage";
 import ExternalSwitch from "@/components/Switch";
 
-type FigureProp = { img_src: string; caption: React.ReactNode; isDark: boolean; idx: number; }
+type FigureProp = { img_src: string; alt: string; title: string; caption: React.ReactNode; isDark: boolean; idx: number; }
 
-const Figure = ({ img_src, caption, isDark, idx }: FigureProp) => {
+const Figure = ({ img_src, alt, title, caption, isDark, idx }: FigureProp) => {
   const caption_clr = isDark ? 'text-gray-400' : 'text-gray-600';
 
   const [invert_prop, set_invert_prop] = useState<'invert' | 'invert-0'>(isDark ? 'invert' : 'invert-0');
@@ -15,9 +16,12 @@ const Figure = ({ img_src, caption, isDark, idx }: FigureProp) => {
 
   return (
     <figure className='flex flex-col items-center justify-center'>
-      <img src={img_src} className={clsx('w-full h-auto rounded-md pt-4 pb-4 transition', invert_prop,
-        invert_prop === 'invert' ? 'bg-gray-200' : ''
-      )} />
+      <ExpandableImage
+        src={img_src}
+        alt={alt}
+        title={title}
+        imageClassName={clsx(invert_prop, invert_prop === 'invert' && 'bg-gray-200')}
+      />
       {
         isDark ?
           <div className={clsx(caption_clr, "text-sm", invert_prop === 'invert' ? 'text-primary-500' : '')}>
@@ -25,7 +29,9 @@ const Figure = ({ img_src, caption, isDark, idx }: FigureProp) => {
             <ExternalSwitch state={invert_prop === 'invert'} switch_state={() => set_invert_prop(invert_prop === 'invert' ? 'invert-0' : 'invert')} size="small" />
           </div> : null
       }
-      <figcaption className={clsx(caption_clr, 'mt-2', 'font-light')}>Figure {idx}. {caption}</figcaption>
+      <figcaption className={clsx('figure-caption', isDark && 'text-gray-300 [&_strong]:text-gray-100')}>
+        <strong>Figure {idx}. {title}.</strong>{' '}{caption}
+      </figcaption>
     </figure>
   );
 }

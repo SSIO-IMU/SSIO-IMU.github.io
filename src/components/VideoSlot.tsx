@@ -5,13 +5,14 @@ type VideoSlotProp = {
   // null renders a placeholder box; set a /video/... path once the clip exists.
   src: string | null;
   label: string;
+  poster?: string;
   width?: number;
   height?: number;
   className?: string;
   controls?: boolean;
 };
 
-const VideoSlot = ({ src, label, width, height, className, controls = true }: VideoSlotProp) => {
+const VideoSlot = ({ src, label, poster, width, height, className, controls = true }: VideoSlotProp) => {
   if (src === null) {
     return (
       <div
@@ -33,6 +34,8 @@ const VideoSlot = ({ src, label, width, height, className, controls = true }: Vi
       loop
       playsInline
       controls={controls}
+      poster={poster}
+      preload='metadata'
       width={width}
       height={height}
       className={clsx('mx-auto h-auto w-full rounded-md shadow-sm', className)}

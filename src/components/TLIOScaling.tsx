@@ -3,6 +3,8 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
+import ExpandableImage from '@/components/ExpandableImage';
+
 export default function TLIOScaling() {
   const [mode, setMode] = useState<'day' | 'night'>('day');
   const [animated, setAnimated] = useState(true);
@@ -54,16 +56,17 @@ export default function TLIOScaling() {
           TLIO motion, trained with the same step budget.
         </p>
         <figure>
-          <img
+          <ExpandableImage
             src={`${imagePath}.${animated ? 'gif' : 'png'}`}
+            expandedSrc={`${imagePath}.png`}
             alt='TLIO scaling: test average velocity error versus training steps for eight data pools, alongside their reconstructed trajectories and ground truth.'
+            title='Scaling with unlabeled TLIO data'
             width={1600}
             height={620}
-            loading='lazy'
-            decoding='async'
-            className='h-auto w-full'
+            imageClassName={isNight ? 'bg-black' : 'bg-white'}
           />
-          <figcaption className='pt-4 text-sm'>
+          <figcaption className={clsx('figure-caption', isNight && 'text-gray-300 [&_strong]:text-gray-100')}>
+            <strong>Eight data pools share the same training-step budget.</strong>{' '}
             Left: test average velocity error during training, with a supervised
             reference. Right: one held-out test trajectory using each pool&apos;s
             validation-selected model. Each data pool appears in turn.

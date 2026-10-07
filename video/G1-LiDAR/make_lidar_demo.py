@@ -36,7 +36,7 @@ def main():
         f"drawtext=fontfile='{font}':text='SSIO':fontsize=48:fontcolor=white:"
         "x=w/2-208:y=h-48-text_h/2",
         "drawbox=x=iw/2+18:y=ih-51:w=84:h=6:color=0xFF0000:t=fill",
-        f"drawtext=fontfile='{font}':text='LiDAR':fontsize=48:fontcolor=white:"
+        f"drawtext=fontfile='{font}':text='SuperOdom':fontsize=48:fontcolor=white:"
         "x=w/2+120:y=h-48-text_h/2",
     ]
     args.output.parent.mkdir(parents=True, exist_ok=True)

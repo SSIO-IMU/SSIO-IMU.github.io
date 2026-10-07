@@ -2,14 +2,16 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
-import React, { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 import '@/lib/env';
 
+import ExpandableImage from '@/components/ExpandableImage';
 import Figure from '@/components/Figure';
 import KatexSpan from '@/components/KaTeX';
 import ArrowLink from '@/components/links/ArrowLink';
 import UnderlineLink from '@/components/links/UnderlineLink';
 import TLIOScaling from '@/components/TLIOScaling';
+import TrajectorySequenceBrowser from '@/components/TrajectorySequenceBrowser';
 import VideoSlot from '@/components/VideoSlot';
 
 // Video paths under public/. null renders a placeholder; set the path once the mp4 exists.
@@ -20,6 +22,10 @@ const VIDEOS = {
   humanoidLidar: '/video/G1-LiDAR/ssio-lidar-8x.mp4',
   mipo: '/video/MIPO-GPS/st_mary_ssio_joints_3panel.mp4',
   grandtourEig1: '/video/ANYmal-GPS/EIG-1_final.mp4',
+  grandtourEth1: '/video/ANYmal-GPS/ETH-1_final.mp4',
+  grandtourEth3: '/video/ANYmal-GPS/ETH-3_final.mp4',
+  grandtourGri1: '/video/ANYmal-GPS/GRI-1_final.mp4',
+  grandtourHeap1: '/video/ANYmal-GPS/HEAP-1_final.mp4',
   grandtourSnow2: '/video/ANYmal-GPS/SNOW-2_final.mp4',
 };
 
@@ -40,25 +46,18 @@ type Demo = {
   name: string;
   logo: string;
   platform: string;
-  videos: { src: string | null; label: string; width: number; height: number }[];
+  videos: { src: string | null; poster: string; label: string; width: number; height: number }[];
 };
 
 const demos: Demo[] = [
-  {
-    embodiment: 'mipo',
-    name: 'MIPO',
-    logo: '/images/logos/MIPO_logo.png',
-    platform: 'Unitree Go1',
-    videos: [{ src: VIDEOS.mipo, label: 'St. Mary', width: 1642, height: 900 }],
-  },
   {
     embodiment: 'humanoid',
     name: 'Humanoid',
     logo: '/images/logos/Humanoid_logo.png',
     platform: 'Unitree G1',
     videos: [
-      { src: VIDEOS.humanoidMacvo, label: 'G1–MACVO · 2×', width: 2478, height: 1190 },
-      { src: VIDEOS.humanoidLidar, label: 'G1–LiDAR · 8×', width: 2484, height: 1464 },
+      { src: VIDEOS.humanoidMacvo, poster: '/video/teaser-poster.jpg', label: 'G1–MACVO · 2×', width: 2478, height: 1190 },
+      { src: VIDEOS.humanoidLidar, poster: '/video/G1-LiDAR/ssio-lidar-poster.jpg', label: 'G1–SuperOdom · 8×', width: 2484, height: 1464 },
     ],
   },
   {
@@ -67,11 +66,27 @@ const demos: Demo[] = [
     logo: '/images/logos/ANYmal_logo.png',
     platform: 'ANYmal',
     videos: [
-      { src: VIDEOS.grandtourEig1, label: 'EIG-1', width: 1464, height: 900 },
-      { src: VIDEOS.grandtourSnow2, label: 'SNOW-2', width: 1950, height: 900 },
+      { src: VIDEOS.grandtourEig1, poster: '/video/ANYmal-GPS/EIG-1-poster.jpg', label: 'EIG-1', width: 1500, height: 900 },
+      { src: VIDEOS.grandtourEth1, poster: '/video/ANYmal-GPS/ETH-1-poster.jpg', label: 'ETH-1', width: 1172, height: 900 },
+      { src: VIDEOS.grandtourEth3, poster: '/video/ANYmal-GPS/ETH-3-poster.jpg', label: 'ETH-3', width: 1248, height: 900 },
+      { src: VIDEOS.grandtourGri1, poster: '/video/ANYmal-GPS/GRI-1-poster.jpg', label: 'GRI-1', width: 1778, height: 900 },
+      { src: VIDEOS.grandtourHeap1, poster: '/video/ANYmal-GPS/HEAP-1-poster.jpg', label: 'HEAP-1', width: 1830, height: 900 },
+      { src: VIDEOS.grandtourSnow2, poster: '/video/ANYmal-GPS/SNOW-2-poster.jpg', label: 'SNOW-2', width: 1998, height: 900 },
     ],
   },
+  {
+    embodiment: 'mipo',
+    name: 'MIPO',
+    logo: '/images/logos/MIPO_logo.png',
+    platform: 'Unitree Go1',
+    videos: [{ src: VIDEOS.mipo, poster: '/video/MIPO-GPS/st-mary-poster.jpg', label: 'St. Mary', width: 1642, height: 900 }],
+  },
 ];
+
+const quadrupedVideoAspectRatio = Math.max(...demos
+  .filter((demo) => demo.embodiment === 'grandtour' || demo.embodiment === 'mipo')
+  .flatMap((demo) => demo.videos.map((video) => video.width / video.height))
+);
 
 const trajectoryGallery: {
   embodiment: Embodiment;
@@ -79,6 +94,8 @@ const trajectoryGallery: {
   platform: string;
   image: string;
   alt: string;
+  takeaway: string;
+  caption: string;
 }[] = [
   {
     embodiment: 'mipo',
@@ -86,6 +103,8 @@ const trajectoryGallery: {
     platform: 'Unitree Go1',
     image: '/images/mipo_SSL_fig.png',
     alt: 'MIPO: 2D trajectories and velocity components for ST-sq5, T-Vis, FyT-04, and T-048. Ground truth is compared with self-supervision, with and without proprioceptive input.',
+    takeaway: 'Joint states and calf IMUs provide additional motion information.',
+    caption: 'MIPO trajectories and velocity components for four sequences compare ground truth with self-supervised models, with and without proprioceptive input.',
   },
   {
     embodiment: 'tlio',
@@ -93,6 +112,8 @@ const trajectoryGallery: {
     platform: 'Pedestrian',
     image: '/images/tlio_ssl_trajectories.png',
     alt: 'TLIO: 2D trajectories and velocity components for three pedestrian sequences, comparing self-supervision with ground truth.',
+    takeaway: 'The same recipe applies to pedestrian motion.',
+    caption: 'TLIO trajectories and velocity components compare self-supervised predictions with ground truth on three pedestrian sequences.',
   },
   {
     embodiment: 'blackbird',
@@ -100,6 +121,8 @@ const trajectoryGallery: {
     platform: 'Racing drone',
     image: '/images/bb_ssl_trajectories.png',
     alt: 'Blackbird: 2D trajectories and velocity components for TiltedThrice, Star, and Patrick, comparing self-supervision with ground truth.',
+    takeaway: 'The same recipe applies to racing-drone motion.',
+    caption: 'Blackbird trajectories and velocity components compare self-supervised predictions with ground truth on TiltedThrice, Star, and Patrick.',
   },
 ];
 
@@ -112,16 +135,28 @@ function TrainingDataLabel({ embodiment }: { embodiment: Embodiment }) {
   );
 }
 
-// [AVE (m/s), ATE (m)] per dataset from Tab. II of the paper; null = error too large to report.
-const resultDatasets = ['TLIO', 'EuRoC', 'Blackbird', 'MIPO', 'GrandTour', 'Humanoid'];
-const resultRows: { method: string; ours: boolean; cells: [string, string][] }[] = [
-  { method: 'RoNIN', ours: false, cells: [['0.119', '2.718'], ['0.575', '5.276'], ['1.738', '16.85'], ['0.145', '0.452'], ['0.051', '2.807'], ['–', '–']] },
-  { method: 'TLIO', ours: false, cells: [['0.092', '1.702'], ['1.646', '10.43'], ['1.609', '17.66'], ['0.202', '0.501'], ['0.108', '3.879'], ['–', '–']] },
-  { method: 'AirIO', ours: false, cells: [['0.081', '1.890'], ['0.335', '3.720'], ['0.318', '6.100'], ['0.120', '0.310'], ['0.068', '3.190'], ['0.087', '1.260']] },
-  { method: 'AirIO† baseline', ours: false, cells: [['0.084', '2.080'], ['0.344', '3.720'], ['0.362', '6.390'], ['0.121', '0.310'], ['0.070', '3.380'], ['0.096', '1.400']] },
-  { method: 'Ours', ours: true, cells: [['0.104', '3.040'], ['0.423', '9.030'], ['0.475', '18.39'], ['0.182', '1.630'], ['0.096', '4.370'], ['0.167', '4.360']] },
-  { method: 'Ours (w/ PGD)', ours: true, cells: [['0.100', '3.010'], ['0.401', '10.23'], ['0.430', '17.93'], ['0.166', '1.640'], ['0.095', '4.340'], ['0.148', '4.270']] },
-];
+function DemoVideoFigure({ demo, video }: { demo: Demo; video: Demo['videos'][number] }) {
+  const isQuadruped = demo.embodiment === 'grandtour' || demo.embodiment === 'mipo';
+  return (
+    <figure>
+      <div className={isQuadruped ? 'relative aspect-[var(--quadruped-video-ratio)]' : undefined}>
+        <VideoSlot
+          src={video.src}
+          poster={video.poster}
+          label={`${demo.name} · ${video.label}`}
+          width={video.width}
+          height={video.height}
+          className={isQuadruped ? 'absolute inset-0 !h-full !w-auto max-w-full' : undefined}
+        />
+      </div>
+      {video.src !== null && (
+        <figcaption className='figure-caption'>
+          <strong>{demo.platform}.</strong> {video.label}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
 
 export default function HomePage() {
   const textColor = 'text-gray-600';
@@ -129,28 +164,14 @@ export default function HomePage() {
   const maskColor = 'bg-white/75';
   const secondaryBgColor = 'bg-gray-100';
   const hlTextColor = 'text-primary-600';
-  const linkIconClass = 'h-6 w-6 shrink-0';
+  const linkIconClass = 'h-5 w-5 shrink-0 md:h-6 md:w-6';
+  const resourceLinkClass =
+    'h-14 justify-center gap-2 rounded-lg border border-solid border-gray-300 bg-white/60 px-3 text-sm [&>svg]:hidden md:mt-6 md:h-auto md:gap-1 md:rounded-none md:border-x-0 md:border-t-0 md:border-dotted md:border-dark md:bg-transparent md:px-0 md:text-lg md:[&>svg]:block';
   const citation_bibtex = `@article{qiu2026ssio,
       title={Self-Supervised Inertial Odometry},
       author={Yuheng Qiu and Yutian Chen and Carlton Cort and Weison Huang and Shibo Zhao and Pieter Abbeel and Rocky Duan and Koushil Sreenath and C. Karen Liu and Carmelo Sferrazza and Junyi Geng and Sebastian Scherer and Guanya Shi},
       year={2026},
 }`;
-  const sliderItems: { title: string; content: React.ReactNode }[] = [
-    {
-      title: 'Introduction',
-      content: <VideoSlot src={VIDEOS.intro} label='SSIO introduction' />,
-    },
-  ];
-  const sliderRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-    const firstChild = slider.children[0] as HTMLElement | undefined;
-    if (!firstChild) return;
-    slider.scrollLeft = firstChild.offsetLeft - (slider.clientWidth - firstChild.clientWidth) / 2;
-  }, []);
-
   return (
     <main>
       <section className={clsx(bgColor, textColor, 'relative flex min-h-screen items-center justify-center overflow-hidden')}>
@@ -176,43 +197,56 @@ export default function HomePage() {
         )}
         <div className={clsx('pointer-events-none absolute inset-0 z-10', maskColor)} />
         <div className='layout z-20 relative flex flex-col items-center justify-center px-4 py-12 text-center'>
-          <h1 className='mt-4 text-5xl mb-4'>
-            <span className={hlTextColor}>S</span>elf-<span className={hlTextColor}>S</span>upervised{' '}
-            <span className={hlTextColor}>I</span>nertial <span className={hlTextColor}>O</span>dometry
+          <h1 className='mb-6 mt-4 text-[clamp(1.75rem,8vw,3rem)] leading-[1.15] tracking-tight md:mb-4 md:text-5xl md:leading-none md:tracking-normal'>
+            <span className='whitespace-nowrap'>
+              <span className={hlTextColor}>S</span>elf-<span className={hlTextColor}>S</span>upervised
+            </span>{' '}
+            <span className='whitespace-nowrap'>
+              <span className={hlTextColor}>I</span>nertial <span className={hlTextColor}>O</span>dometry
+            </span>
           </h1>
           <div className='container pb-6'>
-            <span className='text-lg'>
-              <UnderlineLink href='https://haleqiu.github.io/' className='font-normal'>Yuheng Qiu</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
-              <UnderlineLink href='https://www.yutianchen.blog/' className='font-normal'>Yutian Chen</UnderlineLink><span className='align-super text-sm'>1,2</span>, &nbsp;
-              Carlton Cort<span className='align-super text-sm'>2</span>, &nbsp;
-              Weison Huang<span className='align-super text-sm'>2</span>, &nbsp;
-              Shibo Zhao<span className='align-super text-sm'>1</span>, <br />
-              <UnderlineLink href='https://people.eecs.berkeley.edu/~pabbeel/' className='font-normal'>Pieter Abbeel</UnderlineLink><span className='align-super text-sm'>1,3</span>, &nbsp;
-              Rocky Duan<span className='align-super text-sm'>1</span>, &nbsp;
-              Koushil Sreenath<span className='align-super text-sm'>1,3</span>, &nbsp;
-              C. Karen Liu<span className='align-super text-sm'>1,4</span>, &nbsp;
-              <UnderlineLink href='https://sferrazza.cc/' className='font-normal'>Carmelo Sferrazza</UnderlineLink><span className='align-super text-sm'>1</span>, <br />
-              Junyi Geng<span className='align-super text-sm'>5</span>, &nbsp;
-              <UnderlineLink href='https://theairlab.org/team/sebastian/' className='font-normal'>Sebastian Scherer</UnderlineLink><span className='align-super text-sm'>2</span>, &nbsp;
-              <UnderlineLink href='https://www.gshi.me/' className='font-normal'>Guanya Shi</UnderlineLink><span className='align-super text-sm'>1,2</span>
-            </span>
+            <div className='text-[15px] leading-7 md:text-lg md:leading-[1.75] [&>span]:inline-block [&>span]:whitespace-nowrap [&_sup]:ml-0.5 [&_sup]:text-[0.65em]'>
+              <span><UnderlineLink href='https://haleqiu.github.io/' className='font-normal'>Yuheng Qiu</UnderlineLink><sup>1,2</sup>,</span>{' '}
+              <span><UnderlineLink href='https://www.yutianchen.blog/' className='font-normal'>Yutian Chen</UnderlineLink><sup>1,2</sup>,</span>{' '}
+              <span>Carlton Cort<sup>2</sup>,</span>{' '}
+              <span>Weison Huang<sup>2</sup>,</span>{' '}
+              <span>Shibo Zhao<sup>1</sup>,</span>{' '}
+              <br className='hidden md:block' />
+              <span><UnderlineLink href='https://people.eecs.berkeley.edu/~pabbeel/' className='font-normal'>Pieter Abbeel</UnderlineLink><sup>1,3</sup>,</span>{' '}
+              <span>Rocky Duan<sup>1</sup>,</span>{' '}
+              <span>Koushil Sreenath<sup>1,3</sup>,</span>{' '}
+              <span>C. Karen Liu<sup>1,4</sup>,</span>{' '}
+              <span><UnderlineLink href='https://sferrazza.cc/' className='font-normal'>Carmelo Sferrazza</UnderlineLink><sup>1</sup>,</span>{' '}
+              <br className='hidden md:block' />
+              <span>Junyi Geng<sup>5</sup>,</span>{' '}
+              <span><UnderlineLink href='https://theairlab.org/team/sebastian/' className='font-normal'>Sebastian Scherer</UnderlineLink><sup>2</sup>,</span>{' '}
+              <span><UnderlineLink href='https://www.gshi.me/' className='font-normal'>Guanya Shi</UnderlineLink><sup>1,2</sup></span>
+            </div>
           </div>
-          <div className='container flex flex-row items-center space-x-8 justify-center text-lg'>
+          <div className='grid w-full max-w-sm grid-cols-2 gap-3 md:flex md:max-w-none md:justify-center md:gap-8'>
             {/* TODO: point at the arXiv abstract once it is public. */}
-            <ArrowLink className='mt-6' href='#' variant='light' size='large' icon={
+            <ArrowLink className={resourceLinkClass} href='#' variant='light' size='large' icon={
               <img src='/svg/arxiv.svg' alt='arXiv logo' className={linkIconClass} loading='lazy' />
             }>
-              arXiv (coming soon)
+              arXiv{' '}
+              <span className='block text-[11px] font-normal leading-tight text-gray-500 md:inline md:text-lg md:font-medium md:leading-normal md:text-inherit'>
+                <span className='hidden md:inline'>(</span>coming soon<span className='hidden md:inline'>)</span>
+              </span>
             </ArrowLink>
-            <ArrowLink className='mt-6' href='https://github.com/SSIO-IMU' variant='light' size='large' icon={
+            <ArrowLink className={resourceLinkClass} href='https://github.com/SSIO-IMU' variant='light' size='large' icon={
               <img src='/svg/github.svg' alt='GitHub logo' className={linkIconClass} loading='lazy' />
             }>
-              GitHub Repo
+              GitHub<span className='hidden md:inline'> Repo</span>
             </ArrowLink>
           </div>
-          <div className='mt-6 text-sm'>
-            <p><span className='align-super text-xs'>1</span>Amazon FAR &nbsp;<span className='align-super text-xs'>2</span>Carnegie Mellon University &nbsp;<span className='align-super text-xs'>3</span>UC Berkeley</p>
-            <p><span className='align-super text-xs'>4</span>Stanford University &nbsp;<span className='align-super text-xs'>5</span>Penn State University</p>
+          <div className='mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs leading-5 text-gray-500 md:mt-6 md:block md:text-sm md:text-gray-600 [&>span]:whitespace-nowrap [&_sup]:mr-0.5 [&_sup]:text-[0.7em]'>
+            <span><sup>1</sup>Amazon FAR</span>{' '}
+            <span><sup>2</sup>Carnegie Mellon University</span>{' '}
+            <span><sup>3</sup>UC Berkeley</span>{' '}
+            <br className='hidden md:block' />
+            <span><sup>4</sup>Stanford University</span>{' '}
+            <span><sup>5</sup>Penn State University</span>
           </div>
         </div>
       </section>
@@ -220,7 +254,7 @@ export default function HomePage() {
       <section className={clsx(bgColor, textColor)}>
         <div className='layout py-12'>
           <h2 className='text-center pb-4'>Abstract</h2>
-          <p className='text-pretty'>
+          <p className='mx-auto max-w-[46.25rem] text-pretty text-base leading-[1.75] md:text-lg md:leading-[1.75]'>
             Learning inertial odometry for a new platform usually requires labeled trajectories.
             We show that an <b>IMU integration teacher</b> can train a velocity model from scratch without velocity or position labels.
             The teacher is <i>myopic</i>: it integrates each short window independently.
@@ -231,17 +265,23 @@ export default function HomePage() {
             Across six datasets spanning pedestrians, drones, quadrupeds, and a humanoid, the same recipe applied unchanged trains inertial odometry comparable to a supervised AirIO baseline.
           </p>
           <figure className='mt-8'>
-            <figcaption className='mb-4 text-center text-2xl font-semibold'>
+            <h3 className='mb-4 text-center text-2xl font-semibold'>
               Six Datasets, One Recipe
-            </figcaption>
-            <img
+            </h3>
+            <ExpandableImage
               src='/images/fig1_corrected_legend.png'
-              alt='Trajectories on six datasets: self-supervised model against the supervised AirIO baseline'
+              alt='Trajectory reconstructions and average velocity errors on six datasets, comparing self-supervised SSIO with supervised AirIO.'
+              title='Six datasets, one recipe'
               width={2400}
               height={1000}
-              loading='lazy'
-              className='mx-auto h-auto w-full rounded-md bg-white p-2'
+              imageClassName='bg-white p-2'
             />
+            <figcaption className='figure-caption'>
+              <strong>The same training recipe spans six datasets.</strong>{' '}
+              Trajectory reconstructions (left) and average velocity error in m/s
+              (right; lower is better) compare self-supervised SSIO with supervised
+              AirIO across pedestrians, drones, quadrupeds, and a humanoid.
+            </figcaption>
           </figure>
         </div>
       </section>
@@ -257,14 +297,17 @@ export default function HomePage() {
             Learning from unlabeled motion on quadrupeds and a humanoid,
             without velocity or position labels.
           </p>
-          <div className='grid grid-cols-1 items-start gap-6 md:grid-cols-2'>
+          <div
+            className='grid grid-cols-1 items-stretch gap-6 md:grid-cols-2'
+            style={{ '--quadruped-video-ratio': quadrupedVideoAspectRatio } as CSSProperties}
+          >
             {demos.map((demo) => (
               <article
                 key={demo.embodiment}
                 id={`demo-${demo.embodiment}`}
                 className={clsx(
                   'rounded-2xl bg-white p-4 shadow-sm md:p-6',
-                  demo.videos.length > 1 && 'md:col-span-2'
+                  demo.embodiment === 'humanoid' && 'md:col-span-2'
                 )}
               >
                 <div className='flex items-center gap-3 pb-4'>
@@ -276,55 +319,59 @@ export default function HomePage() {
                     <TrainingDataLabel embodiment={demo.embodiment} />
                   </div>
                 </div>
-                <div
-                  className='grid gap-6 md:grid-cols-[var(--video-columns)]'
-                  style={{
-                    '--video-columns': demo.videos
-                      .map(({ width, height }) => `minmax(0, ${width / height}fr)`)
-                      .join(' '),
-                  } as React.CSSProperties}
-                >
-                  {demo.videos.map((video) => (
-                    <figure key={video.label}>
-                      <VideoSlot
-                        src={video.src}
-                        label={`${demo.name} · ${video.label}`}
-                        width={video.width}
-                        height={video.height}
-                      />
-                      {video.src !== null && (
-                        <figcaption className='pt-2 text-sm text-gray-500'>
+                {demo.embodiment === 'grandtour' ? (
+                  <TabGroup>
+                    <TabPanels>
+                      {demo.videos.map((video) => (
+                        <TabPanel key={video.label}>
+                          <DemoVideoFigure demo={demo} video={video} />
+                        </TabPanel>
+                      ))}
+                    </TabPanels>
+                    <TabList aria-label='GrandTour video sequences' className='mt-4 flex flex-wrap gap-2'>
+                      {demo.videos.map((video) => (
+                        <Tab
+                          key={video.label}
+                          className={({ selected }) => clsx(
+                            'rounded-full border px-3 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                            selected
+                              ? 'border-primary-600 bg-primary-600 text-white'
+                              : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
+                          )}
+                        >
                           {video.label}
-                        </figcaption>
-                      )}
-                    </figure>
-                  ))}
-                </div>
+                        </Tab>
+                      ))}
+                    </TabList>
+                  </TabGroup>
+                ) : (
+                  <div
+                    className='grid gap-6 md:grid-cols-[var(--video-columns)]'
+                    style={{
+                      '--video-columns': demo.videos
+                        .map(({ width, height }) => `minmax(0, ${width / height}fr)`)
+                        .join(' '),
+                    } as CSSProperties}
+                  >
+                    {demo.videos.map((video) => (
+                      <DemoVideoFigure key={video.label} demo={demo} video={video} />
+                    ))}
+                  </div>
+                )}
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className='bg-dark text-gray-200 py-8'>
-        <div className='relative'>
-          <div
-            ref={sliderRef}
-            className='flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-6 px-48 pb-2 scrollbar-dark'
-            aria-label='SSIO highlights slider'
-          >
-            {sliderItems.map((item) => (
-              <article
-                key={item.title}
-                className='flex-none snap-center w-[85%] md:w-[70%] lg:w-[55%] bg-gray-900/50 border border-white/10 rounded-2xl p-6 shadow-2xl backdrop-blur'
-              >
-                <h3 className='text-2xl font-semibold mb-4'>{item.title}</h3>
-                {item.content}
-              </article>
-            ))}
-          </div>
-          <div className='pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-dark to-transparent' />
-          <div className='pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-dark to-transparent' />
+      <section id='introduction' aria-labelledby='introduction-title' className='bg-dark py-8 text-gray-200'>
+        <div className='layout'>
+          <article className='mx-auto max-w-4xl rounded-2xl border border-white/10 bg-gray-900/50 p-4 shadow-2xl backdrop-blur md:p-6'>
+            <h2 id='introduction-title' className='mb-4 text-center text-2xl font-semibold'>
+              Introduction
+            </h2>
+            <VideoSlot src={VIDEOS.intro} label='SSIO introduction' />
+          </article>
         </div>
       </section>
 
@@ -337,105 +384,73 @@ export default function HomePage() {
           <h2 id='trajectory-gallery-title' className='mb-4'>Traj Gallery</h2>
           <p className='text-lg pb-6'>
             2D trajectories and velocity components compared with ground truth.
-            Each model is trained from scratch with <span className={hlTextColor}>no velocity or position labels</span>.
+            Our models are trained from scratch with <span className={hlTextColor}>no velocity or position labels</span>.
           </p>
           <TabGroup>
-            <TabList aria-label='Trajectory datasets' className='mb-6 flex flex-wrap gap-2'>
-              {trajectoryGallery.map((item) => (
+            <TabList aria-label='Trajectory gallery views' className='mb-6 flex flex-wrap gap-2 border-b border-gray-300'>
+              {['Test sequences', 'Overview figures'].map((view) => (
                 <Tab
-                  key={item.embodiment}
+                  key={view}
                   className={({ selected }) => clsx(
-                    'rounded-full border px-5 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                    '-mb-px border-b-2 px-4 py-3 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
                     selected
-                      ? 'border-primary-600 bg-primary-600 text-white'
-                      : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
+                      ? 'border-primary-600 text-primary-700'
+                      : 'border-transparent hover:text-primary-600'
                   )}
                 >
-                  {item.name}
+                  {view}
                 </Tab>
               ))}
             </TabList>
             <TabPanels>
-              {trajectoryGallery.map((item) => (
-                <TabPanel key={item.embodiment}>
-                  <figure className='rounded-2xl bg-white p-4 shadow-sm md:p-6'>
-                    <figcaption className='mb-4 flex flex-wrap items-baseline justify-between gap-2'>
-                      <h3 className='text-xl text-gray-800'>
-                        {item.name} <span className='font-normal text-gray-500'>· {item.platform}</span>
-                      </h3>
-                      <TrainingDataLabel embodiment={item.embodiment} />
-                    </figcaption>
-                    <a
-                      href={item.image}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label={`Open ${item.name} trajectory and velocity plots at full resolution`}
-                      className='block rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600'
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.alt}
-                        width={2400}
-                        height={1350}
-                        loading='lazy'
-                        className='h-auto w-full'
-                      />
-                    </a>
-                  </figure>
-                </TabPanel>
-              ))}
+              <TabPanel>
+                <TrajectorySequenceBrowser />
+              </TabPanel>
+              <TabPanel>
+                <TabGroup>
+                  <TabList aria-label='Overview datasets' className='mb-6 flex flex-wrap gap-2'>
+                    {trajectoryGallery.map((item) => (
+                      <Tab
+                        key={item.embodiment}
+                        className={({ selected }) => clsx(
+                          'rounded-full border px-5 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                          selected
+                            ? 'border-primary-600 bg-primary-600 text-white'
+                            : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
+                        )}
+                      >
+                        {item.name}
+                      </Tab>
+                    ))}
+                  </TabList>
+                  <TabPanels>
+                    {trajectoryGallery.map((item) => (
+                      <TabPanel key={item.embodiment}>
+                        <figure className='rounded-2xl bg-white p-4 shadow-sm md:p-6'>
+                          <div className='mb-4 flex flex-wrap items-baseline justify-between gap-2'>
+                            <h3 className='text-xl text-gray-800'>
+                              {item.name} <span className='font-normal text-gray-500'>· {item.platform}</span>
+                            </h3>
+                            <TrainingDataLabel embodiment={item.embodiment} />
+                          </div>
+                          <ExpandableImage
+                            src={item.image}
+                            alt={item.alt}
+                            title={`${item.name} trajectories and velocities`}
+                            width={2400}
+                            height={1350}
+                          />
+                          <figcaption className='figure-caption'>
+                            <strong>{item.takeaway}</strong> {item.caption}
+                          </figcaption>
+                        </figure>
+                      </TabPanel>
+                    ))}
+                  </TabPanels>
+                </TabGroup>
+              </TabPanel>
             </TabPanels>
           </TabGroup>
-        </div>
-      </section>
-
-      <section className={clsx(bgColor, textColor)}>
-        <div className='layout py-12'>
-          <h2 className='mb-4'>Self-Supervised Learning From Scratch</h2>
-          <p className='text-lg pb-4'>
-            With reference attitude for teacher gravity compensation, our PGD-refined models stay within{' '}
-            <span className={hlTextColor}><KatexSpan text='$0.07$' /> m/s</span> average velocity error (AVE) of the same-architecture supervised AirIO† baseline on every dataset.
-          </p>
-          <div className='overflow-x-auto'>
-            <table className='w-full min-w-[720px] text-center text-sm'>
-              <thead>
-                <tr className='border-b border-gray-300'>
-                  <th rowSpan={2} className='py-2 text-left'>Method</th>
-                  {resultDatasets.map((d) => (
-                    <th key={d} colSpan={2} className='pt-2'>{d}</th>
-                  ))}
-                </tr>
-                <tr className='border-b-2 border-gray-300'>
-                  {resultDatasets.map((d) => (
-                    <React.Fragment key={d}>
-                      <th className='pb-1 font-normal'>AVE↓</th>
-                      <th className='pb-1 font-normal'>ATE↓</th>
-                    </React.Fragment>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {resultRows.map((r) => (
-                  <tr key={r.method} className={clsx('border-b border-gray-200', r.ours && 'bg-orange-50 font-semibold text-gray-800')}>
-                    <td className='py-2 text-left'>
-                      {r.method}
-                      <span className='font-light italic'>{r.ours ? ' (self-supervised)' : ' (supervised)'}</span>
-                    </td>
-                    {r.cells.map(([ave, ate], i) => (
-                      <React.Fragment key={resultDatasets[i]}>
-                        <td>{ave}</td>
-                        <td>{ate}</td>
-                      </React.Fragment>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className='pt-2 text-sm font-light'>
-            AVE in m/s, ATE in m. &ldquo;–&rdquo; denotes error too large to report.
-            AirIO† removes the attitude encoder from AirIO and is trained with ground-truth velocity: the matched-architecture reference for our rows.
-          </p>
         </div>
       </section>
 
@@ -456,6 +471,8 @@ export default function HomePage() {
           <div className='mx-auto max-w-3xl'>
             <Figure
               img_src='/images/fig2_pipeline.png'
+              alt='SSIO training pipeline with an IMU integration teacher, integration self-supervision, and pose graph distillation.'
+              title='The IMU input provides the training signal'
               caption={
                 <span>
                   <b>Integration self-supervision</b> trains the motion network to match the body-frame velocity change predicted by the frozen integration teacher.
@@ -475,6 +492,8 @@ export default function HomePage() {
           <div className='mx-auto max-w-3xl'>
             <Figure
               img_src='/images/fig3_Embodiment1_traj_v3.png'
+              alt='Proprioceptive inputs for the Go1, ANYmal, and G1 robots, with GrandTour trajectories for Eig-1 and SNOW-2.'
+              title='Proprioceptive inputs complement the IMU'
               caption='Top: proprioceptive input for Go1 (MIPO), ANYmal (GrandTour), and G1 (Humanoid). Bottom: GrandTour trajectories for the Eig-1 and SNOW-2 sequences.'
               isDark={false}
               idx={2}

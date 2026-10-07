@@ -1,0 +1,590 @@
+[
+  {
+    "id": "humanoid",
+    "name": "Humanoid",
+    "sequences": [
+      {
+        "id": "humanoid-10871_humanoid_20260520_223451-73de899949",
+        "name": "10871_humanoid_20260520_223451",
+        "poster": "/images/trajectories/humanoid/10871_humanoid_20260520_223451-73de899949/humanoid_trajectory_velocity.png",
+        "animation": "/images/trajectories/humanoid/10871_humanoid_20260520_223451-73de899949/humanoid_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  {
+    "id": "grandtour",
+    "name": "GrandTour",
+    "sequences": [
+      {
+        "id": "grandtour-2024-10-01-11-29-55-a8796f7cf5",
+        "name": "2024-10-01-11-29-55",
+        "poster": "/images/trajectories/grandtour/2024-10-01-11-29-55-a8796f7cf5/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-10-01-11-29-55-a8796f7cf5/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-10-01-12-00-49-d3c8b84e06",
+        "name": "2024-10-01-12-00-49",
+        "poster": "/images/trajectories/grandtour/2024-10-01-12-00-49-d3c8b84e06/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-10-01-12-00-49-d3c8b84e06/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-11-02-21-12-51-a230c497cd",
+        "name": "2024-11-02-21-12-51",
+        "poster": "/images/trajectories/grandtour/2024-11-02-21-12-51-a230c497cd/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-11-02-21-12-51-a230c497cd/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-11-03-07-57-34-ed569271da",
+        "name": "2024-11-03-07-57-34",
+        "poster": "/images/trajectories/grandtour/2024-11-03-07-57-34-ed569271da/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-11-03-07-57-34-ed569271da/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-11-03-13-51-43-701f503232",
+        "name": "2024-11-03-13-51-43",
+        "poster": "/images/trajectories/grandtour/2024-11-03-13-51-43-701f503232/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-11-03-13-51-43-701f503232/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-11-04-10-57-34-f49b92bc19",
+        "name": "2024-11-04-10-57-34",
+        "poster": "/images/trajectories/grandtour/2024-11-04-10-57-34-f49b92bc19/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-11-04-10-57-34-f49b92bc19/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "grandtour-2024-11-14-13-45-37-8c6944f7ea",
+        "name": "2024-11-14-13-45-37",
+        "poster": "/images/trajectories/grandtour/2024-11-14-13-45-37-8c6944f7ea/grandtour_trajectory_velocity.png",
+        "animation": "/images/trajectories/grandtour/2024-11-14-13-45-37-8c6944f7ea/grandtour_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  {
+    "id": "mipo",
+    "name": "MIPO",
+    "sequences": [
+      {
+        "id": "mipo-230622_robustness_230622-risqh-trot-02-044-33square.h5-6079e8a80f",
+        "name": "230622_robustness/230622-risqh-trot-02-044-33square.h5",
+        "poster": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-02-044-33square.h5-6079e8a80f/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-02-044-33square.h5-6079e8a80f/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-230622_robustness_230622-risqh-trot-02-052-33square.h5-f2b084b1ac",
+        "name": "230622_robustness/230622-risqh-trot-02-052-33square.h5",
+        "poster": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-02-052-33square.h5-f2b084b1ac/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-02-052-33square.h5-f2b084b1ac/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-230622_robustness_230622-risqh-trot-06-044-33square.h5-284f4b3519",
+        "name": "230622_robustness/230622-risqh-trot-06-044-33square.h5",
+        "poster": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-06-044-33square.h5-284f4b3519/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/230622_robustness_230622-risqh-trot-06-044-33square.h5-284f4b3519/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230615_risqh_gait_analysis_20230615-risqh-flyingtrot-04-04-square.h5-ab679223fb",
+        "name": "20230615_risqh_gait_analysis/20230615-risqh-flyingtrot-04-04-square.h5",
+        "poster": "/images/trajectories/mipo/20230615_risqh_gait_analysis_20230615-risqh-flyingtrot-04-04-square.h5-ab679223fb/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230615_risqh_gait_analysis_20230615-risqh-flyingtrot-04-04-square.h5-ab679223fb/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230615_risqh_gait_analysis_20230615-risqh-standtrot-04-06-square.h5-d7c60451b9",
+        "name": "20230615_risqh_gait_analysis/20230615-risqh-standtrot-04-06-square.h5",
+        "poster": "/images/trajectories/mipo/20230615_risqh_gait_analysis_20230615-risqh-standtrot-04-06-square.h5-d7c60451b9/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230615_risqh_gait_analysis_20230615-risqh-standtrot-04-06-square.h5-d7c60451b9/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230620_risqh_robustness_test_230620-risqh-trot-05-048-33square.h5-e163923312",
+        "name": "20230620_risqh_robustness_test/230620-risqh-trot-05-048-33square.h5",
+        "poster": "/images/trajectories/mipo/20230620_risqh_robustness_test_230620-risqh-trot-05-048-33square.h5-e163923312/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230620_risqh_robustness_test_230620-risqh-trot-05-048-33square.h5-e163923312/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230620_risqh_robustness_test_230620-risqh-trot-10-036-33square-convexmpc.h5-abdfe3b8fb",
+        "name": "20230620_risqh_robustness_test/230620-risqh-trot-10-036-33square-convexmpc.h5",
+        "poster": "/images/trajectories/mipo/20230620_risqh_robustness_test_230620-risqh-trot-10-036-33square-convexmpc.h5-abdfe3b8fb/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230620_risqh_robustness_test_230620-risqh-trot-10-036-33square-convexmpc.h5-abdfe3b8fb/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230625_gait_230625-risqh-flytrot-06-036-33square.h5-e6c9ed4a1b",
+        "name": "20230625_gait/230625-risqh-flytrot-06-036-33square.h5",
+        "poster": "/images/trajectories/mipo/20230625_gait_230625-risqh-flytrot-06-036-33square.h5-e6c9ed4a1b/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230625_gait_230625-risqh-flytrot-06-036-33square.h5-e6c9ed4a1b/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230625_gait_230625-risqh-flytrot-08-032-33square.h5-8e0da99f37",
+        "name": "20230625_gait/230625-risqh-flytrot-08-032-33square.h5",
+        "poster": "/images/trajectories/mipo/20230625_gait_230625-risqh-flytrot-08-032-33square.h5-8e0da99f37/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230625_gait_230625-risqh-flytrot-08-032-33square.h5-8e0da99f37/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230625_gait_230625-risqh-standtrot-02-040-33square.h5-736df155b8",
+        "name": "20230625_gait/230625-risqh-standtrot-02-040-33square.h5",
+        "poster": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-02-040-33square.h5-736df155b8/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-02-040-33square.h5-736df155b8/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230625_gait_230625-risqh-standtrot-06-040-33square.h5-2f69c827d4",
+        "name": "20230625_gait/230625-risqh-standtrot-06-040-33square.h5",
+        "poster": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-06-040-33square.h5-2f69c827d4/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-06-040-33square.h5-2f69c827d4/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "mipo-20230625_gait_230625-risqh-standtrot-08-040-33square.h5-9f97cf32f5",
+        "name": "20230625_gait/230625-risqh-standtrot-08-040-33square.h5",
+        "poster": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-08-040-33square.h5-9f97cf32f5/mipo_trajectory_velocity.png",
+        "animation": "/images/trajectories/mipo/20230625_gait_230625-risqh-standtrot-08-040-33square.h5-9f97cf32f5/mipo_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  {
+    "id": "euroc",
+    "name": "EuRoC",
+    "sequences": [
+      {
+        "id": "euroc-MH_02_easy-98d8288f04",
+        "name": "MH_02_easy",
+        "poster": "/images/trajectories/euroc/MH_02_easy-98d8288f04/euroc_trajectory_velocity.png",
+        "animation": "/images/trajectories/euroc/MH_02_easy-98d8288f04/euroc_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "euroc-MH_04_difficult-fa6dcb5b57",
+        "name": "MH_04_difficult",
+        "poster": "/images/trajectories/euroc/MH_04_difficult-fa6dcb5b57/euroc_trajectory_velocity.png",
+        "animation": "/images/trajectories/euroc/MH_04_difficult-fa6dcb5b57/euroc_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "euroc-V1_01_easy-7c7eb9eb2d",
+        "name": "V1_01_easy",
+        "poster": "/images/trajectories/euroc/V1_01_easy-7c7eb9eb2d/euroc_trajectory_velocity.png",
+        "animation": "/images/trajectories/euroc/V1_01_easy-7c7eb9eb2d/euroc_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "euroc-V1_03_difficult-ecc4f4bb2f",
+        "name": "V1_03_difficult",
+        "poster": "/images/trajectories/euroc/V1_03_difficult-ecc4f4bb2f/euroc_trajectory_velocity.png",
+        "animation": "/images/trajectories/euroc/V1_03_difficult-ecc4f4bb2f/euroc_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "euroc-V2_02_medium-4f5d19e6e0",
+        "name": "V2_02_medium",
+        "poster": "/images/trajectories/euroc/V2_02_medium-4f5d19e6e0/euroc_trajectory_velocity.png",
+        "animation": "/images/trajectories/euroc/V2_02_medium-4f5d19e6e0/euroc_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  {
+    "id": "tlio",
+    "name": "TLIO",
+    "sequences": [
+      {
+        "id": "tlio-145820422949970-14efb170a0",
+        "name": "145820422949970",
+        "poster": "/images/trajectories/tlio/145820422949970-14efb170a0/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/145820422949970-14efb170a0/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-146734859523827-4e49a8eede",
+        "name": "146734859523827",
+        "poster": "/images/trajectories/tlio/146734859523827-4e49a8eede/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/146734859523827-4e49a8eede/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-182009952689275-6ee21228c6",
+        "name": "182009952689275",
+        "poster": "/images/trajectories/tlio/182009952689275-6ee21228c6/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/182009952689275-6ee21228c6/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-198123397647575-138914e0d3",
+        "name": "198123397647575",
+        "poster": "/images/trajectories/tlio/198123397647575-138914e0d3/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/198123397647575-138914e0d3/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-203487666948423-4e7017c99e",
+        "name": "203487666948423",
+        "poster": "/images/trajectories/tlio/203487666948423-4e7017c99e/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/203487666948423-4e7017c99e/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-232871430741025-ba33253eef",
+        "name": "232871430741025",
+        "poster": "/images/trajectories/tlio/232871430741025-ba33253eef/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/232871430741025-ba33253eef/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-237500726938324-a2e43b29dc",
+        "name": "237500726938324",
+        "poster": "/images/trajectories/tlio/237500726938324-a2e43b29dc/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/237500726938324-a2e43b29dc/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-247823452637228-6a9132e9c2",
+        "name": "247823452637228",
+        "poster": "/images/trajectories/tlio/247823452637228-6a9132e9c2/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/247823452637228-6a9132e9c2/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-286510035288905-eb801efa7a",
+        "name": "286510035288905",
+        "poster": "/images/trajectories/tlio/286510035288905-eb801efa7a/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/286510035288905-eb801efa7a/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-299905500837994-b2d42451cd",
+        "name": "299905500837994",
+        "poster": "/images/trajectories/tlio/299905500837994-b2d42451cd/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/299905500837994-b2d42451cd/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-327734051135228-8a1ac2d9c5",
+        "name": "327734051135228",
+        "poster": "/images/trajectories/tlio/327734051135228-8a1ac2d9c5/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/327734051135228-8a1ac2d9c5/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-353903485150701-f552868ffa",
+        "name": "353903485150701",
+        "poster": "/images/trajectories/tlio/353903485150701-f552868ffa/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/353903485150701-f552868ffa/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-395135734333599-e03144e2e9",
+        "name": "395135734333599",
+        "poster": "/images/trajectories/tlio/395135734333599-e03144e2e9/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/395135734333599-e03144e2e9/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-399195950576622-eaec0c21f7",
+        "name": "399195950576622",
+        "poster": "/images/trajectories/tlio/399195950576622-eaec0c21f7/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/399195950576622-eaec0c21f7/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-410916322722958-0ad30490f6",
+        "name": "410916322722958",
+        "poster": "/images/trajectories/tlio/410916322722958-0ad30490f6/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/410916322722958-0ad30490f6/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-501321100341226-6e4b6e49ae",
+        "name": "501321100341226",
+        "poster": "/images/trajectories/tlio/501321100341226-6e4b6e49ae/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/501321100341226-6e4b6e49ae/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-643495372649567-a1692a6336",
+        "name": "643495372649567",
+        "poster": "/images/trajectories/tlio/643495372649567-a1692a6336/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/643495372649567-a1692a6336/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-670410520012837-2d6810636f",
+        "name": "670410520012837",
+        "poster": "/images/trajectories/tlio/670410520012837-2d6810636f/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/670410520012837-2d6810636f/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-898972030293554-a17ba9f883",
+        "name": "898972030293554",
+        "poster": "/images/trajectories/tlio/898972030293554-a17ba9f883/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/898972030293554-a17ba9f883/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-910410555821206-d2530ebfe3",
+        "name": "910410555821206",
+        "poster": "/images/trajectories/tlio/910410555821206-d2530ebfe3/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/910410555821206-d2530ebfe3/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-955615084638299-bf81099ad9",
+        "name": "955615084638299",
+        "poster": "/images/trajectories/tlio/955615084638299-bf81099ad9/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/955615084638299-bf81099ad9/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1008221029329889-f033fffcd7",
+        "name": "1008221029329889",
+        "poster": "/images/trajectories/tlio/1008221029329889-f033fffcd7/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1008221029329889-f033fffcd7/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1014753008676428-71d88fe3a3",
+        "name": "1014753008676428",
+        "poster": "/images/trajectories/tlio/1014753008676428-71d88fe3a3/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1014753008676428-71d88fe3a3/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1024599341033662-213b3b8dd9",
+        "name": "1024599341033662",
+        "poster": "/images/trajectories/tlio/1024599341033662-213b3b8dd9/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1024599341033662-213b3b8dd9/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1718648064889757-29aa84dc74",
+        "name": "1718648064889757",
+        "poster": "/images/trajectories/tlio/1718648064889757-29aa84dc74/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1718648064889757-29aa84dc74/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1795239267188486-6217c8ae35",
+        "name": "1795239267188486",
+        "poster": "/images/trajectories/tlio/1795239267188486-6217c8ae35/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1795239267188486-6217c8ae35/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1839497672785722-b212b44d48",
+        "name": "1839497672785722",
+        "poster": "/images/trajectories/tlio/1839497672785722-b212b44d48/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1839497672785722-b212b44d48/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1931177940505479-791bee9e86",
+        "name": "1931177940505479",
+        "poster": "/images/trajectories/tlio/1931177940505479-791bee9e86/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1931177940505479-791bee9e86/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-1936963843006626-f2e6d4ee07",
+        "name": "1936963843006626",
+        "poster": "/images/trajectories/tlio/1936963843006626-f2e6d4ee07/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/1936963843006626-f2e6d4ee07/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2063273887328664-9e4bb7cb69",
+        "name": "2063273887328664",
+        "poster": "/images/trajectories/tlio/2063273887328664-9e4bb7cb69/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2063273887328664-9e4bb7cb69/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2100421890282669-5c3e76885d",
+        "name": "2100421890282669",
+        "poster": "/images/trajectories/tlio/2100421890282669-5c3e76885d/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2100421890282669-5c3e76885d/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2142509999304237-8522adba83",
+        "name": "2142509999304237",
+        "poster": "/images/trajectories/tlio/2142509999304237-8522adba83/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2142509999304237-8522adba83/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2142577795957193-c29e1f7a7b",
+        "name": "2142577795957193",
+        "poster": "/images/trajectories/tlio/2142577795957193-c29e1f7a7b/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2142577795957193-c29e1f7a7b/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2165220000379117-c555f49053",
+        "name": "2165220000379117",
+        "poster": "/images/trajectories/tlio/2165220000379117-c555f49053/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2165220000379117-c555f49053/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "tlio-2166453986939743-3b474e7c64",
+        "name": "2166453986939743",
+        "poster": "/images/trajectories/tlio/2166453986939743-3b474e7c64/tlio_trajectory_velocity.png",
+        "animation": "/images/trajectories/tlio/2166453986939743-3b474e7c64/tlio_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  {
+    "id": "blackbird",
+    "name": "Blackbird",
+    "sequences": [
+      {
+        "id": "blackbird-bentDice_yawForward_maxSpeed1p0-14ba269c2c",
+        "name": "bentDice/yawForward/maxSpeed1p0",
+        "poster": "/images/trajectories/blackbird/bentDice_yawForward_maxSpeed1p0-14ba269c2c/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/bentDice_yawForward_maxSpeed1p0-14ba269c2c/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-bentDice_yawForward_maxSpeed3p0-3937ef14bd",
+        "name": "bentDice/yawForward/maxSpeed3p0",
+        "poster": "/images/trajectories/blackbird/bentDice_yawForward_maxSpeed3p0-3937ef14bd/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/bentDice_yawForward_maxSpeed3p0-3937ef14bd/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-clover_yawForward_maxSpeed5p0-d6c3af98a2",
+        "name": "clover/yawForward/maxSpeed5p0",
+        "poster": "/images/trajectories/blackbird/clover_yawForward_maxSpeed5p0-d6c3af98a2/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/clover_yawForward_maxSpeed5p0-d6c3af98a2/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-egg_yawForward_maxSpeed3p0-fa9f833a70",
+        "name": "egg/yawForward/maxSpeed3p0",
+        "poster": "/images/trajectories/blackbird/egg_yawForward_maxSpeed3p0-fa9f833a70/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/egg_yawForward_maxSpeed3p0-fa9f833a70/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-mouse_yawForward_maxSpeed6p0-91180d1a68",
+        "name": "mouse/yawForward/maxSpeed6p0",
+        "poster": "/images/trajectories/blackbird/mouse_yawForward_maxSpeed6p0-91180d1a68/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/mouse_yawForward_maxSpeed6p0-91180d1a68/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-mouse_yawForward_maxSpeed7p0-e4603d000a",
+        "name": "mouse/yawForward/maxSpeed7p0",
+        "poster": "/images/trajectories/blackbird/mouse_yawForward_maxSpeed7p0-e4603d000a/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/mouse_yawForward_maxSpeed7p0-e4603d000a/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-picasso_yawConstant_maxSpeed2p0-54f6b05e99",
+        "name": "picasso/yawConstant/maxSpeed2p0",
+        "poster": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed2p0-54f6b05e99/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed2p0-54f6b05e99/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-picasso_yawConstant_maxSpeed3p0-816a86631c",
+        "name": "picasso/yawConstant/maxSpeed3p0",
+        "poster": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed3p0-816a86631c/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed3p0-816a86631c/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "blackbird-picasso_yawConstant_maxSpeed6p0-9fef53bd45",
+        "name": "picasso/yawConstant/maxSpeed6p0",
+        "poster": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed6p0-9fef53bd45/blackbird_trajectory_velocity.png",
+        "animation": "/images/trajectories/blackbird/picasso_yawConstant_maxSpeed6p0-9fef53bd45/blackbird_trajectory_velocity.gif",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  }
+]
