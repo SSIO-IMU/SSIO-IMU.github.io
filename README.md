@@ -41,11 +41,11 @@ Robot demos follow the abstract and “Six Datasets, One Recipe” figure.
 The cards appear in this order: Humanoid, GrandTour, then MIPO.
 The humanoid card contains both G1–MACVO (2×) and G1–SuperOdom (8×) and is directly
 accessible at the `#demo-humanoid` anchor.
-GrandTour and MIPO share a row on tablet and desktop. GrandTour has six sequence
+GrandTour and MIPO each occupy a full-width row. GrandTour has six sequence
 tabs—EIG-1, ETH-1, ETH-3, GRI-1, HEAP-1, and SNOW-2—with one active player.
-Both cards use the same video height, with each video's width following its
-native aspect ratio. The humanoid pair also shares a height. Cards stack on
-mobile without cropping the videos.
+Their videos fill the card width, with height following each video's native
+aspect ratio. The humanoid pair shares a height on tablet and desktop and
+stacks on mobile. Videos are never cropped or stretched.
 
 The G1 teaser plays at 2× speed with “2×” and “Self-supervised with 1h data”
 burned into the top left and an SSIO (pink) / MACVO (blue) legend in a bottom
@@ -61,12 +61,34 @@ Only the SSIO (yellow) / SuperOdom (red) legend appears in the bottom strip.
 The rendering script is
 `video/G1-LiDAR/make_lidar_demo.py`.
 
-The other source clips are in `video/MIPO-GPS/` and `video/ANYmal-GPS/`; the
-website copies use the same subfolders under `public/video/`. All clips are
-H.264 MP4s with fast-start metadata.
+The MIPO video has a black header with “Unitree Go-1 with self-supervision” and
+an SSIO (solid pink) / GPS (GT) (dashed teal) legend in a bottom strip, matching
+G1–MACVO. Both strips sit outside the full original recording. Its 16-second,
+30 fps playback is unchanged. Render it from the original with:
+
+```bash
+python video/make_gps_demo.py video/MIPO-GPS/st_mary_ssio_joints_3panel.mp4 \
+  video/MIPO-GPS/st-mary-ssio-gps.mp4 --platform 'Unitree Go-1'
+```
+
+The labeled master is `video/MIPO-GPS/st-mary-ssio-gps.mp4`, with its website
+copy under `public/video/MIPO-GPS/`. GrandTour labeled masters are in
+`video/ANYmal-GPS/`, with website copies under `public/video/ANYmal-GPS/`.
+All clips are H.264 MP4s with fast-start metadata.
 The six GrandTour clips come from `FINAL_GrandTour_satellite_videos`, including
-the updated EIG-1 and SNOW-2 renders. Each is 10 seconds at 30 fps, with its native
-dimensions preserved. Their posters use the frame at 5 seconds.
+the updated EIG-1 and SNOW-2 renders. Each has an “ANYmal with self-supervision”
+title above the recording and the same SSIO / GPS (GT) legend below it.
+The original content retains its native dimensions, with 96 px added at the top
+and bottom. Each clip remains 10 seconds at 30 fps. Their posters use the frame
+at 5 seconds.
+
+Render each GrandTour clip from the original downloads, for example:
+
+```bash
+python video/make_gps_demo.py \
+  ~/Downloads/FINAL_GrandTour_satellite_videos/EIG-1_GrandTour_satellite.mp4 \
+  video/ANYmal-GPS/EIG-1_final.mp4 --platform ANYmal
+```
 
 Each demo has a poster set in the `demos` array. G1–MACVO reuses the hero poster.
 G1–SuperOdom and MIPO use the full frame at 5 seconds, scaled to 1280 px wide.
@@ -90,7 +112,7 @@ frame from the same video as its poster. The full frame fits without cropping.
 | `intro` | `ssio_introduction.mp4` | Centered Introduction section |
 | `humanoidMacvo` | `teaser.mp4` | Main-page humanoid demo · G1–MACVO (2×) |
 | `humanoidLidar` | `G1-LiDAR/ssio-lidar-8x.mp4` | Main-page humanoid demo · G1–SuperOdom (8×) |
-| `mipo` | `MIPO-GPS/st_mary_ssio_joints_3panel.mp4` | Main-page MIPO demo |
+| `mipo` | `MIPO-GPS/st-mary-ssio-gps.mp4` | Main-page MIPO demo · SSIO / GPS (GT) |
 | `grandtourEig1` | `ANYmal-GPS/EIG-1_final.mp4` | GrandTour · EIG-1 (initial selection) |
 | `grandtourEth1` | `ANYmal-GPS/ETH-1_final.mp4` | GrandTour · ETH-1 |
 | `grandtourEth3` | `ANYmal-GPS/ETH-3_final.mp4` | GrandTour · ETH-3 |

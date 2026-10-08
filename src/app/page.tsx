@@ -20,7 +20,7 @@ const VIDEOS = {
   intro: null as string | null, // '/video/ssio_introduction.mp4'
   humanoidMacvo: '/video/teaser.mp4',
   humanoidLidar: '/video/G1-LiDAR/ssio-lidar-8x.mp4',
-  mipo: '/video/MIPO-GPS/st_mary_ssio_joints_3panel.mp4',
+  mipo: '/video/MIPO-GPS/st-mary-ssio-gps.mp4',
   grandtourEig1: '/video/ANYmal-GPS/EIG-1_final.mp4',
   grandtourEth1: '/video/ANYmal-GPS/ETH-1_final.mp4',
   grandtourEth3: '/video/ANYmal-GPS/ETH-3_final.mp4',
@@ -66,12 +66,12 @@ const demos: Demo[] = [
     logo: '/images/logos/ANYmal_logo.png',
     platform: 'ANYmal',
     videos: [
-      { src: VIDEOS.grandtourEig1, poster: '/video/ANYmal-GPS/EIG-1-poster.jpg', label: 'EIG-1', width: 1500, height: 900 },
-      { src: VIDEOS.grandtourEth1, poster: '/video/ANYmal-GPS/ETH-1-poster.jpg', label: 'ETH-1', width: 1172, height: 900 },
-      { src: VIDEOS.grandtourEth3, poster: '/video/ANYmal-GPS/ETH-3-poster.jpg', label: 'ETH-3', width: 1248, height: 900 },
-      { src: VIDEOS.grandtourGri1, poster: '/video/ANYmal-GPS/GRI-1-poster.jpg', label: 'GRI-1', width: 1778, height: 900 },
-      { src: VIDEOS.grandtourHeap1, poster: '/video/ANYmal-GPS/HEAP-1-poster.jpg', label: 'HEAP-1', width: 1830, height: 900 },
-      { src: VIDEOS.grandtourSnow2, poster: '/video/ANYmal-GPS/SNOW-2-poster.jpg', label: 'SNOW-2', width: 1998, height: 900 },
+      { src: VIDEOS.grandtourEig1, poster: '/video/ANYmal-GPS/EIG-1-poster.jpg', label: 'EIG-1', width: 1500, height: 1092 },
+      { src: VIDEOS.grandtourEth1, poster: '/video/ANYmal-GPS/ETH-1-poster.jpg', label: 'ETH-1', width: 1172, height: 1092 },
+      { src: VIDEOS.grandtourEth3, poster: '/video/ANYmal-GPS/ETH-3-poster.jpg', label: 'ETH-3', width: 1248, height: 1092 },
+      { src: VIDEOS.grandtourGri1, poster: '/video/ANYmal-GPS/GRI-1-poster.jpg', label: 'GRI-1', width: 1778, height: 1092 },
+      { src: VIDEOS.grandtourHeap1, poster: '/video/ANYmal-GPS/HEAP-1-poster.jpg', label: 'HEAP-1', width: 1830, height: 1092 },
+      { src: VIDEOS.grandtourSnow2, poster: '/video/ANYmal-GPS/SNOW-2-poster.jpg', label: 'SNOW-2', width: 1998, height: 1092 },
     ],
   },
   {
@@ -79,14 +79,9 @@ const demos: Demo[] = [
     name: 'MIPO',
     logo: '/images/logos/MIPO_logo.png',
     platform: 'Unitree Go1',
-    videos: [{ src: VIDEOS.mipo, poster: '/video/MIPO-GPS/st-mary-poster.jpg', label: 'St. Mary', width: 1642, height: 900 }],
+    videos: [{ src: VIDEOS.mipo, poster: '/video/MIPO-GPS/st-mary-poster.jpg', label: 'St. Mary', width: 1642, height: 1092 }],
   },
 ];
-
-const quadrupedVideoAspectRatio = Math.max(...demos
-  .filter((demo) => demo.embodiment === 'grandtour' || demo.embodiment === 'mipo')
-  .flatMap((demo) => demo.videos.map((video) => video.width / video.height))
-);
 
 const trajectoryGallery: {
   embodiment: Embodiment;
@@ -136,19 +131,15 @@ function TrainingDataLabel({ embodiment }: { embodiment: Embodiment }) {
 }
 
 function DemoVideoFigure({ demo, video }: { demo: Demo; video: Demo['videos'][number] }) {
-  const isQuadruped = demo.embodiment === 'grandtour' || demo.embodiment === 'mipo';
   return (
     <figure>
-      <div className={isQuadruped ? 'relative aspect-[var(--quadruped-video-ratio)]' : undefined}>
-        <VideoSlot
-          src={video.src}
-          poster={video.poster}
-          label={`${demo.name} · ${video.label}`}
-          width={video.width}
-          height={video.height}
-          className={isQuadruped ? 'absolute inset-0 !h-full !w-auto max-w-full' : undefined}
-        />
-      </div>
+      <VideoSlot
+        src={video.src}
+        poster={video.poster}
+        label={`${demo.name} · ${video.label}`}
+        width={video.width}
+        height={video.height}
+      />
       {video.src !== null && (
         <figcaption className='figure-caption'>
           <strong>{demo.platform}.</strong> {video.label}
@@ -297,18 +288,12 @@ export default function HomePage() {
             Learning from unlabeled motion on quadrupeds and a humanoid,
             without velocity or position labels.
           </p>
-          <div
-            className='grid grid-cols-1 items-stretch gap-6 md:grid-cols-2'
-            style={{ '--quadruped-video-ratio': quadrupedVideoAspectRatio } as CSSProperties}
-          >
+          <div className='grid grid-cols-1 gap-6'>
             {demos.map((demo) => (
               <article
                 key={demo.embodiment}
                 id={`demo-${demo.embodiment}`}
-                className={clsx(
-                  'rounded-2xl bg-white p-4 shadow-sm md:p-6',
-                  demo.embodiment === 'humanoid' && 'md:col-span-2'
-                )}
+                className='rounded-2xl bg-white p-4 shadow-sm md:p-6'
               >
                 <div className='flex items-center gap-3 pb-4'>
                   <img src={demo.logo} alt='' className='h-12 w-12 object-contain' />
