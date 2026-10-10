@@ -3,7 +3,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
 import { Check, Copy } from 'lucide-react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import '@/lib/env';
 
@@ -119,6 +119,42 @@ type DemoVideo = { demo: Demo; video: Demo['videos'][number] };
 
 function videoPairs(items: DemoVideo[]) {
   return Array.from({ length: Math.ceil(items.length / 2) }, (_, i) => items.slice(2 * i, 2 * i + 2));
+}
+
+function FindingBlock({
+  idx,
+  title,
+  setup,
+  results,
+  note,
+  children,
+}: {
+  idx: number;
+  title: string;
+  setup: ReactNode;
+  results: ReactNode[];
+  note: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <article className='grid items-center gap-8 border-t border-gray-200 py-12 lg:grid-cols-[2fr_3fr] lg:gap-12'>
+      <div>
+        <h2 className='pb-4 text-gray-800'>
+          <span className='text-primary-600'>Finding {idx}:</span> {title}
+        </h2>
+        <p className='pb-3 text-lg'>{setup}</p>
+        <ul className='list-disc space-y-2 pb-4 pl-6 text-lg'>
+          {results.map((result, i) => (
+            <li key={i}>{result}</li>
+          ))}
+        </ul>
+        <p className='rounded-r-lg border-l-4 border-primary-500 bg-primary-50 px-4 py-3 text-sm leading-relaxed'>
+          <strong className='text-primary-700'>Note:</strong> {note}
+        </p>
+      </div>
+      <div>{children}</div>
+    </article>
+  );
 }
 
 function DemoVideoFigure({ demo, video }: DemoVideo) {
@@ -343,8 +379,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <TLIOScaling />
-
       <section className={clsx(secondaryBgColor, textColor)}>
         <div className='layout py-12'>
           <h2 className='pb-4'>Methods</h2>
@@ -385,6 +419,38 @@ export default function HomePage() {
               idx={2}
             />
           </div>
+        </div>
+      </section>
+
+      <TLIOScaling />
+
+      <section id='findings' aria-label='Student surpasses its teacher' className={clsx(bgColor, textColor)}>
+        <div className='layout'>
+          <FindingBlock
+            idx={2}
+            title='Learning from a myopic teacher, the student surpasses it'
+            setup={<>The integration teacher integrates each short IMU window independently, so its error grows with the horizon. The student only ever sees these short-window targets.</>}
+            results={[
+              <>Over short horizons the teacher is more accurate; the student&apos;s error grows far more slowly.</>,
+              <>At a 20 s horizon the student reaches <span className={hlTextColor}>0.141 m/s</span> versus the teacher&apos;s <span className={hlTextColor}>0.885 m/s</span>, roughly a sixfold reduction.</>,
+              <>Even a student supervised on 0.05 s windows beats the teacher from 5 s onward (0.285 vs 0.885 m/s at 20 s).</>,
+            ]}
+            note={<>This is an empirical observation on TLIO; the paper does not yet give a theoretical account of why the student generalizes beyond its teacher.</>}
+          >
+            <figure>
+              <ExpandableImage
+                src='/images/fig_teacher_horizon.png'
+                alt='Velocity-change error of the integration teacher and of students trained with supervision horizons from 0.05 s to 3.65 s, across evaluation horizons from 0.05 s to 20 s on TLIO.'
+                title='The student surpasses its myopic teacher'
+                width={2093}
+                height={1320}
+              />
+              <figcaption className='figure-caption'>
+                <strong>Velocity-change error [m/s] on TLIO.</strong> Top row: integration teacher. Other rows: students trained with supervision horizons from 0.05 s to 3.65 s.
+                Parentheses give the difference to the teacher; red cells are worse and blue cells better than the teacher.
+              </figcaption>
+            </figure>
+          </FindingBlock>
         </div>
       </section>
 
