@@ -2,7 +2,7 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import '@/lib/env';
 
 import ExpandableImage from '@/components/ExpandableImage';
@@ -138,6 +138,42 @@ function videoPairs(items: DemoVideo[]) {
   return Array.from({ length: Math.ceil(items.length / 2) }, (_, i) => items.slice(2 * i, 2 * i + 2));
 }
 
+function FindingBlock({
+  idx,
+  title,
+  setup,
+  results,
+  note,
+  children,
+}: {
+  idx: number;
+  title: string;
+  setup: ReactNode;
+  results: ReactNode[];
+  note: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <article className='grid items-center gap-8 border-t border-gray-200 py-12 lg:grid-cols-[2fr_3fr] lg:gap-12'>
+      <div>
+        <h2 className='pb-4 text-gray-800'>
+          <span className='text-primary-600'>Finding {idx}:</span> {title}
+        </h2>
+        <p className='pb-3 text-lg'>{setup}</p>
+        <ul className='list-disc space-y-2 pb-4 pl-6 text-lg'>
+          {results.map((result, i) => (
+            <li key={i}>{result}</li>
+          ))}
+        </ul>
+        <p className='rounded-r-lg border-l-4 border-primary-500 bg-primary-50 px-4 py-3 text-sm leading-relaxed'>
+          <strong className='text-primary-700'>Note:</strong> {note}
+        </p>
+      </div>
+      <div>{children}</div>
+    </article>
+  );
+}
+
 function DemoVideoFigure({ demo, video }: DemoVideo) {
   return (
     <figure>
@@ -163,9 +199,9 @@ export default function HomePage() {
   const maskColor = 'bg-white/75';
   const secondaryBgColor = 'bg-gray-100';
   const hlTextColor = 'text-primary-600';
-  const linkIconClass = 'h-5 w-5 shrink-0 md:h-6 md:w-6';
+  const linkIconClass = 'h-5 w-5 shrink-0 md:h-6 md:w-6 xl:h-7 xl:w-7';
   const resourceLinkClass =
-    'h-14 justify-center gap-2 rounded-lg border border-solid border-gray-300 bg-white/60 px-3 text-sm [&>svg]:hidden md:mt-6 md:h-auto md:gap-1 md:rounded-none md:border-x-0 md:border-t-0 md:border-dotted md:border-dark md:bg-transparent md:px-0 md:text-lg md:[&>svg]:block';
+    'h-14 justify-center gap-2 rounded-lg border border-solid border-gray-300 bg-white/60 px-3 text-sm [&>svg]:hidden md:mt-6 md:h-auto md:gap-1 md:rounded-none md:border-x-0 md:border-t-0 md:border-dotted md:border-dark md:bg-transparent md:px-0 md:text-lg xl:text-xl md:[&>svg]:block';
   const citation_bibtex = `@article{qiu2026ssio,
       title={Self-Supervised Inertial Odometry},
       author={Yuheng Qiu and Yutian Chen and Carlton Cort and Weison Huang and Shibo Zhao and Pieter Abbeel and Rocky Duan and Koushil Sreenath and C. Karen Liu and Carmelo Sferrazza and Junyi Geng and Sebastian Scherer and Guanya Shi},
@@ -196,7 +232,7 @@ export default function HomePage() {
         )}
         <div className={clsx('pointer-events-none absolute inset-0 z-10', maskColor)} />
         <div className='layout z-20 relative flex flex-col items-center justify-center px-4 py-12 text-center'>
-          <h1 className='mb-6 mt-4 text-[clamp(1.75rem,8vw,3rem)] leading-[1.15] tracking-tight md:mb-4 md:text-5xl md:leading-none md:tracking-normal'>
+          <h1 className='mb-6 mt-4 text-[clamp(1.75rem,8vw,3rem)] leading-[1.15] tracking-tight md:mb-4 md:text-5xl md:leading-none md:tracking-normal xl:mb-6 xl:text-6xl 2xl:text-7xl'>
             <span className='whitespace-nowrap'>
               <span className={hlTextColor}>S</span>elf-<span className={hlTextColor}>S</span>upervised
             </span>{' '}
@@ -205,7 +241,7 @@ export default function HomePage() {
             </span>
           </h1>
           <div className='container pb-6'>
-            <div className='text-[15px] leading-7 md:text-lg md:leading-[1.75] [&>span]:inline-block [&>span]:whitespace-nowrap [&_sup]:ml-0.5 [&_sup]:text-[0.65em]'>
+            <div className='text-[15px] leading-7 md:text-lg md:leading-[1.75] xl:text-xl 2xl:text-2xl [&>span]:inline-block [&>span]:whitespace-nowrap [&_sup]:ml-0.5 [&_sup]:text-[0.65em]'>
               <span><UnderlineLink href='https://haleqiu.github.io/' className='font-normal'>Yuheng Qiu</UnderlineLink><sup>1,2</sup>,</span>{' '}
               <span><UnderlineLink href='https://www.yutianchen.blog/' className='font-normal'>Yutian Chen</UnderlineLink><sup>1,2</sup>,</span>{' '}
               <span>Carlton Cort<sup>2</sup>,</span>{' '}
@@ -229,7 +265,7 @@ export default function HomePage() {
               <img src='/svg/arxiv.svg' alt='arXiv logo' className={linkIconClass} loading='lazy' />
             }>
               arXiv{' '}
-              <span className='block text-[11px] font-normal leading-tight text-gray-500 md:inline md:text-lg md:font-medium md:leading-normal md:text-inherit'>
+              <span className='block text-[11px] font-normal leading-tight text-gray-500 md:inline md:text-lg md:font-medium xl:text-xl md:leading-normal md:text-inherit'>
                 <span className='hidden md:inline'>(</span>coming soon<span className='hidden md:inline'>)</span>
               </span>
             </ArrowLink>
@@ -239,7 +275,7 @@ export default function HomePage() {
               GitHub<span className='hidden md:inline'> Repo</span>
             </ArrowLink>
           </div>
-          <div className='mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs leading-5 text-gray-500 md:mt-6 md:block md:text-sm md:text-gray-600 [&>span]:whitespace-nowrap [&_sup]:mr-0.5 [&_sup]:text-[0.7em]'>
+          <div className='mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs leading-5 text-gray-500 md:mt-6 md:block md:text-sm md:text-gray-600 xl:text-base 2xl:text-lg [&>span]:whitespace-nowrap [&_sup]:mr-0.5 [&_sup]:text-[0.7em]'>
             <span><sup>1</sup>Amazon FAR</span>{' '}
             <span><sup>2</sup>Carnegie Mellon University</span>{' '}
             <span><sup>3</sup>UC Berkeley</span>{' '}
@@ -356,8 +392,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <TLIOScaling />
-
       <section className={clsx(secondaryBgColor, textColor)}>
         <div className='layout py-12'>
           <h2 className='pb-4'>Methods</h2>
@@ -398,6 +432,38 @@ export default function HomePage() {
               idx={2}
             />
           </div>
+        </div>
+      </section>
+
+      <TLIOScaling />
+
+      <section id='findings' aria-label='Student surpasses its teacher' className={clsx(bgColor, textColor)}>
+        <div className='layout'>
+          <FindingBlock
+            idx={2}
+            title='Learning from a myopic teacher, the student surpasses it'
+            setup={<>The integration teacher integrates each short IMU window independently, so its error grows with the horizon. The student only ever sees these short-window targets.</>}
+            results={[
+              <>Over short horizons the teacher is more accurate; the student&apos;s error grows far more slowly.</>,
+              <>At a 20 s horizon the student reaches <span className={hlTextColor}>0.141 m/s</span> versus the teacher&apos;s <span className={hlTextColor}>0.885 m/s</span>, roughly a sixfold reduction.</>,
+              <>Even a student supervised on 0.05 s windows beats the teacher from 5 s onward (0.285 vs 0.885 m/s at 20 s).</>,
+            ]}
+            note={<>This is an empirical observation on TLIO; the paper does not yet give a theoretical account of why the student generalizes beyond its teacher.</>}
+          >
+            <figure>
+              <ExpandableImage
+                src='/images/fig_teacher_horizon.png'
+                alt='Velocity-change error of the integration teacher and of students trained with supervision horizons from 0.05 s to 3.65 s, across evaluation horizons from 0.05 s to 20 s on TLIO.'
+                title='The student surpasses its myopic teacher'
+                width={2093}
+                height={1320}
+              />
+              <figcaption className='figure-caption'>
+                <strong>Velocity-change error [m/s] on TLIO.</strong> Top row: integration teacher. Other rows: students trained with supervision horizons from 0.05 s to 3.65 s.
+                Parentheses give the difference to the teacher; red cells are worse and blue cells better than the teacher.
+              </figcaption>
+            </figure>
+          </FindingBlock>
         </div>
       </section>
 

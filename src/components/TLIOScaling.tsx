@@ -26,7 +26,9 @@ export default function TLIOScaling() {
     >
       <div className='layout py-12'>
         <div className='flex flex-wrap items-center justify-between gap-4 pb-4'>
-          <h2 id='tlio-scaling-title'>Scaling with Unlabeled TLIO Data</h2>
+          <h2 id='tlio-scaling-title' className={isNight ? 'text-gray-100' : 'text-gray-800'}>
+            <span className='text-primary-600'>Finding 1:</span> Accuracy scales with unlabeled data
+          </h2>
           <div
             role='group'
             aria-label='Scaling visualization color mode'
@@ -52,8 +54,9 @@ export default function TLIOScaling() {
           </div>
         </div>
         <p className='pb-6 text-lg'>
-          Eight training-data pools, from 15 minutes to 25.3 hours of unlabeled
-          TLIO motion, trained with the same step budget.
+          Held-out velocity error improves steadily as the unlabeled TLIO data
+          grows from 15 minutes to 25.3 hours, approaching the supervised AirIO
+          baseline at full scale. All eight data pools share the same step budget.
         </p>
         <figure>
           <ExpandableImage
