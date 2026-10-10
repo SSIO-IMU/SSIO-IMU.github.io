@@ -78,8 +78,8 @@
   /* #endregion  /**======== Typography =========== */
 
   .layout {
-    /* 1100px */
-    max-width: 68.75rem;
+    /* 1400px */
+    max-width: 87.5rem;
     @apply mx-auto w-11/12;
   }
 
@@ -99,7 +99,7 @@
 
 @layer components {
   .figure-caption {
-    @apply mx-auto mt-4 w-full max-w-[46.25rem] text-left text-sm leading-relaxed text-gray-600;
+    @apply mx-auto mt-4 w-full text-left text-sm leading-relaxed text-gray-600;
   }
 
   .figure-caption strong {

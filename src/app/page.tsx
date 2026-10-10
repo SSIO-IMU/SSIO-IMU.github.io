@@ -17,7 +17,7 @@ import VideoSlot from '@/components/VideoSlot';
 // Video paths under public/. null renders a placeholder; set the path once the mp4 exists.
 const VIDEOS = {
   teaser: '/video/teaser.mp4',
-  intro: null as string | null, // '/video/ssio_introduction.mp4'
+  intro: '/video/ssio_introduction.mp4',
   humanoidMacvo: '/video/teaser.mp4',
   humanoidLidar: '/video/G1-LiDAR/ssio-lidar-8x.mp4',
   mipo: '/video/MIPO-GPS/st-mary-ssio-gps.mp4',
@@ -67,7 +67,6 @@ const demos: Demo[] = [
     platform: 'ANYmal',
     videos: [
       { src: VIDEOS.grandtourEig1, poster: '/video/ANYmal-GPS/EIG-1-poster.jpg', label: 'EIG-1', width: 1500, height: 1092 },
-      { src: VIDEOS.grandtourEth1, poster: '/video/ANYmal-GPS/ETH-1-poster.jpg', label: 'ETH-1', width: 1172, height: 1092 },
       { src: VIDEOS.grandtourEth3, poster: '/video/ANYmal-GPS/ETH-3-poster.jpg', label: 'ETH-3', width: 1248, height: 1092 },
       { src: VIDEOS.grandtourGri1, poster: '/video/ANYmal-GPS/GRI-1-poster.jpg', label: 'GRI-1', width: 1778, height: 1092 },
       { src: VIDEOS.grandtourHeap1, poster: '/video/ANYmal-GPS/HEAP-1-poster.jpg', label: 'HEAP-1', width: 1830, height: 1092 },
@@ -82,6 +81,9 @@ const demos: Demo[] = [
     videos: [{ src: VIDEOS.mipo, poster: '/video/MIPO-GPS/st-mary-poster.jpg', label: 'St. Mary', width: 1642, height: 1092 }],
   },
 ];
+
+// Each inner list renders as one card; its videos flow two per row across the listed embodiments.
+const demoCards: Embodiment[][] = [['humanoid'], ['grandtour', 'mipo']];
 
 const trajectoryGallery: {
   embodiment: Embodiment;
@@ -130,7 +132,13 @@ function TrainingDataLabel({ embodiment }: { embodiment: Embodiment }) {
   );
 }
 
-function DemoVideoFigure({ demo, video }: { demo: Demo; video: Demo['videos'][number] }) {
+type DemoVideo = { demo: Demo; video: Demo['videos'][number] };
+
+function videoPairs(items: DemoVideo[]) {
+  return Array.from({ length: Math.ceil(items.length / 2) }, (_, i) => items.slice(2 * i, 2 * i + 2));
+}
+
+function DemoVideoFigure({ demo, video }: DemoVideo) {
   return (
     <figure>
       <VideoSlot
@@ -207,7 +215,7 @@ export default function HomePage() {
               <span><UnderlineLink href='https://people.eecs.berkeley.edu/~pabbeel/' className='font-normal'>Pieter Abbeel</UnderlineLink><sup>1,3</sup>,</span>{' '}
               <span>Rocky Duan<sup>1</sup>,</span>{' '}
               <span>Koushil Sreenath<sup>1,3</sup>,</span>{' '}
-              <span>C. Karen Liu<sup>1,4</sup>,</span>{' '}
+              <span><UnderlineLink href='https://profiles.stanford.edu/c-karen-liu' className='font-normal'>C. Karen Liu</UnderlineLink><sup>1,4</sup>,</span>{' '}
               <span><UnderlineLink href='https://sferrazza.cc/' className='font-normal'>Carmelo Sferrazza</UnderlineLink><sup>1</sup>,</span>{' '}
               <br className='hidden md:block' />
               <span>Junyi Geng<sup>5</sup>,</span>{' '}
@@ -245,7 +253,7 @@ export default function HomePage() {
       <section className={clsx(bgColor, textColor)}>
         <div className='layout py-12'>
           <h2 className='text-center pb-4'>Abstract</h2>
-          <p className='mx-auto max-w-[46.25rem] text-pretty text-base leading-[1.75] md:text-lg md:leading-[1.75]'>
+          <p className='text-pretty text-base leading-[1.75] md:text-lg md:leading-[1.75]'>
             Learning inertial odometry for a new platform usually requires labeled trajectories.
             We show that an <b>IMU integration teacher</b> can train a velocity model from scratch without velocity or position labels.
             The teacher is <i>myopic</i>: it integrates each short window independently.
@@ -283,87 +291,120 @@ export default function HomePage() {
         className={clsx(secondaryBgColor, textColor)}
       >
         <div className='layout py-12'>
-          <h2 id='robot-demos-title' className='mb-4'>Self-Supervised Odometry in Motion</h2>
+          <h2 id='robot-demos-title' className='mb-4'>Self-Supervised Inertial Odometry on Real Robots</h2>
           <p className='pb-6 text-lg'>
             Learning from unlabeled motion on quadrupeds and a humanoid,
             without velocity or position labels.
           </p>
           <div className='grid grid-cols-1 gap-6'>
-            {demos.map((demo) => (
-              <article
-                key={demo.embodiment}
-                id={`demo-${demo.embodiment}`}
-                className='rounded-2xl bg-white p-4 shadow-sm md:p-6'
-              >
-                <div className='flex items-center gap-3 pb-4'>
-                  <img src={demo.logo} alt='' className='h-12 w-12 object-contain' />
-                  <div>
-                    <h3 className='text-xl text-gray-800'>
-                      {demo.name} <span className='font-normal text-gray-500'>· {demo.platform}</span>
-                    </h3>
-                    <TrainingDataLabel embodiment={demo.embodiment} />
-                  </div>
-                </div>
-                {demo.embodiment === 'grandtour' ? (
-                  <TabGroup>
-                    <TabPanels>
-                      {demo.videos.map((video) => (
-                        <TabPanel key={video.label}>
-                          <DemoVideoFigure demo={demo} video={video} />
-                        </TabPanel>
-                      ))}
-                    </TabPanels>
-                    <TabList aria-label='GrandTour video sequences' className='mt-4 flex flex-wrap gap-2'>
-                      {demo.videos.map((video) => (
-                        <Tab
-                          key={video.label}
-                          className={({ selected }) => clsx(
-                            'rounded-full border px-3 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
-                            selected
-                              ? 'border-primary-600 bg-primary-600 text-white'
-                              : 'border-gray-300 bg-white hover:border-primary-600 hover:text-primary-600'
-                          )}
-                        >
-                          {video.label}
-                        </Tab>
-                      ))}
-                    </TabList>
-                  </TabGroup>
-                ) : (
-                  <div
-                    className='grid gap-6 md:grid-cols-[var(--video-columns)]'
-                    style={{
-                      '--video-columns': demo.videos
-                        .map(({ width, height }) => `minmax(0, ${width / height}fr)`)
-                        .join(' '),
-                    } as CSSProperties}
-                  >
-                    {demo.videos.map((video) => (
-                      <DemoVideoFigure key={video.label} demo={demo} video={video} />
+            {demoCards.map((embodiments) => {
+              const cardDemos = demos.filter((d) => embodiments.includes(d.embodiment));
+              const items = cardDemos.flatMap((demo) => demo.videos.map((video) => ({ demo, video })));
+              return (
+                <article
+                  key={embodiments.join('-')}
+                  id={`demo-${embodiments.join('-')}`}
+                  className='rounded-2xl bg-white p-4 shadow-sm md:p-6'
+                >
+                  <div className='flex flex-wrap items-center gap-x-10 gap-y-4 pb-4'>
+                    {cardDemos.map((demo) => (
+                      <div key={demo.embodiment} className='flex items-center gap-3'>
+                        <img src={demo.logo} alt='' className='h-12 w-12 object-contain' />
+                        <div>
+                          <h3 className='text-xl text-gray-800'>
+                            {demo.name} <span className='font-normal text-gray-500'>· {demo.platform}</span>
+                          </h3>
+                          <TrainingDataLabel embodiment={demo.embodiment} />
+                        </div>
+                      </div>
                     ))}
                   </div>
-                )}
-              </article>
-            ))}
+                  <div className='grid gap-6'>
+                    {videoPairs(items).map((pair) => (
+                      <div
+                        key={pair[0].video.label}
+                        className='grid gap-6 md:grid-cols-[var(--video-columns)]'
+                        style={{
+                          // Columns proportional to aspect ratio give both videos in a row the same height.
+                          // A lone video takes half the row so it is not shown larger than its neighbours.
+                          '--video-columns': pair.length === 2
+                            ? pair.map(({ video }) => `minmax(0, ${video.width / video.height}fr)`).join(' ')
+                            : 'repeat(2, minmax(0, 1fr))',
+                        } as CSSProperties}
+                      >
+                        {pair.map(({ demo, video }) => (
+                          <DemoVideoFigure key={video.label} demo={demo} video={video} />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
       <section id='introduction' aria-labelledby='introduction-title' className='bg-dark py-8 text-gray-200'>
         <div className='layout'>
-          <article className='mx-auto max-w-4xl rounded-2xl border border-white/10 bg-gray-900/50 p-4 shadow-2xl backdrop-blur md:p-6'>
+          <article className='rounded-2xl border border-white/10 bg-gray-900/50 p-4 shadow-2xl backdrop-blur md:p-6'>
             <h2 id='introduction-title' className='mb-4 text-center text-2xl font-semibold'>
               Introduction
             </h2>
-            <VideoSlot src={VIDEOS.intro} label='SSIO introduction' />
+            <VideoSlot src={VIDEOS.intro} poster='/video/ssio_introduction-poster.jpg' label='SSIO introduction' width={1920} height={1080} />
           </article>
+        </div>
+      </section>
+
+      <TLIOScaling />
+
+      <section className={clsx(secondaryBgColor, textColor)}>
+        <div className='layout py-12'>
+          <h2 className='pb-4'>Methods</h2>
+          <p className='text-lg'>The training signal comes from the IMU input itself, not from a recorded trajectory:</p>
+          <ol className='text-lg list-decimal ml-12 pb-4'>
+            <li className='pt-2'>
+              <span className={hlTextColor}>Integration self-supervision.</span> A frozen integration teacher turns each short IMU window into a velocity change; the network&apos;s predicted velocities at the window endpoints must reproduce it.
+            </li>
+            <li className='pt-2'>
+              <span className={hlTextColor}>Pose graph distillation (PGD).</span> One full-sequence pose graph built from the teacher&apos;s IMU factors and the network&apos;s velocity factors is solved for sequence-consistent velocities, which then supervise the network.
+            </li>
+          </ol>
+          <h3 className='pb-2 pt-4'>Proprioceptive Input</h3>
+          <p className='pb-2'>
+            On the three articulated platforms that log proprioception, feeding joint states to the student (and, on MIPO, the four calf-mounted IMUs) lowers both velocity and trajectory error, with the teacher and loss unchanged.
+          </p>
+          <div className='grid items-start gap-8 pt-6 md:grid-cols-[1.63fr_1.29fr]'>
+            <Figure
+              img_src='/images/fig2_pipeline.png'
+              alt='SSIO training pipeline with an IMU integration teacher, integration self-supervision, and pose graph distillation.'
+              title='The IMU input provides the training signal'
+              caption={
+                <span>
+                  <b>Integration self-supervision</b> trains the motion network to match the body-frame velocity change predicted by the frozen integration teacher.
+                  {' '}<b>Pose graph distillation</b> builds a full-sequence pose graph from the teacher&apos;s IMU factors and the network&apos;s velocity factors; the graph posterior <KatexSpan text='$\mathbf{v}^{\mathrm{opt}}$' /> then supervises the network through an L2 loss.
+                  {' '}Velocity regularization <KatexSpan text='$\mathcal{L}^{\mathrm{reg}}$' /> is applied over detected static frames.
+                </span>
+              }
+              isDark={false}
+              idx={1}
+            />
+            <Figure
+              img_src='/images/fig3_Embodiment1_traj_v3.png'
+              alt='Proprioceptive inputs for the Go1, ANYmal, and G1 robots, with GrandTour trajectories for Eig-1 and SNOW-2.'
+              title='Proprioceptive inputs complement the IMU'
+              caption='Top: proprioceptive input for Go1 (MIPO), ANYmal (GrandTour), and G1 (Humanoid). Bottom: GrandTour trajectories for the Eig-1 and SNOW-2 sequences.'
+              isDark={false}
+              idx={2}
+            />
+          </div>
         </div>
       </section>
 
       <section
         id='trajectory-gallery'
         aria-labelledby='trajectory-gallery-title'
-        className={clsx(secondaryBgColor, textColor)}
+        className={clsx(bgColor, textColor)}
       >
         <div className='layout py-12'>
           <h2 id='trajectory-gallery-title' className='mb-4'>Traj Gallery</h2>
@@ -439,58 +480,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <TLIOScaling />
-
-      <section className={clsx(secondaryBgColor, textColor)}>
-        <div className='layout py-12'>
-          <h2 className='pb-4'>Methods</h2>
-          <p className='text-lg'>The training signal comes from the IMU input itself, not from a recorded trajectory:</p>
-          <ol className='text-lg list-decimal ml-12 pb-4'>
-            <li className='pt-2'>
-              <span className={hlTextColor}>Integration self-supervision.</span> A frozen integration teacher turns each short IMU window into a velocity change; the network&apos;s predicted velocities at the window endpoints must reproduce it.
-            </li>
-            <li className='pt-2'>
-              <span className={hlTextColor}>Pose graph distillation (PGD).</span> One full-sequence pose graph built from the teacher&apos;s IMU factors and the network&apos;s velocity factors is solved for sequence-consistent velocities, which then supervise the network.
-            </li>
-          </ol>
-          <div className='mx-auto max-w-3xl'>
-            <Figure
-              img_src='/images/fig2_pipeline.png'
-              alt='SSIO training pipeline with an IMU integration teacher, integration self-supervision, and pose graph distillation.'
-              title='The IMU input provides the training signal'
-              caption={
-                <span>
-                  <b>Integration self-supervision</b> trains the motion network to match the body-frame velocity change predicted by the frozen integration teacher.
-                  {' '}<b>Pose graph distillation</b> builds a full-sequence pose graph from the teacher&apos;s IMU factors and the network&apos;s velocity factors; the graph posterior <KatexSpan text='$\mathbf{v}^{\mathrm{opt}}$' /> then supervises the network through an L2 loss.
-                  {' '}Velocity regularization <KatexSpan text='$\mathcal{L}^{\mathrm{reg}}$' /> is applied over detected static frames.
-                </span>
-              }
-              isDark={false}
-              idx={1}
-            />
-          </div>
-          <div className='pb-16' />
-          <h3 className='pb-2'>Proprioceptive Input</h3>
-          <p className='pb-2'>
-            On the three articulated platforms that log proprioception, feeding joint states to the student (and, on MIPO, the four calf-mounted IMUs) lowers both velocity and trajectory error, with the teacher and loss unchanged.
-          </p>
-          <div className='mx-auto max-w-3xl'>
-            <Figure
-              img_src='/images/fig3_Embodiment1_traj_v3.png'
-              alt='Proprioceptive inputs for the Go1, ANYmal, and G1 robots, with GrandTour trajectories for Eig-1 and SNOW-2.'
-              title='Proprioceptive inputs complement the IMU'
-              caption='Top: proprioceptive input for Go1 (MIPO), ANYmal (GrandTour), and G1 (Humanoid). Bottom: GrandTour trajectories for the Eig-1 and SNOW-2 sequences.'
-              isDark={false}
-              idx={2}
-            />
-          </div>
-        </div>
-      </section>
-
       <section className={clsx(bgColor, textColor)}>
         <div className='layout pt-4 pb-48'>
           <h2 className='mt-12 mb-4'>Citation</h2>
-          <pre className='ml-12 whitespace-pre-wrap'>{citation_bibtex}</pre>
+          <pre className='whitespace-pre-wrap'>{citation_bibtex}</pre>
         </div>
       </section>
     </main>
