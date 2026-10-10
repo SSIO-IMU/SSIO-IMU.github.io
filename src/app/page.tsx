@@ -2,7 +2,9 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
+import { Check, Copy } from 'lucide-react';
 import type { CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import '@/lib/env';
 
 import ExpandableImage from '@/components/ExpandableImage';
@@ -31,16 +33,6 @@ const VIDEOS = {
 
 type Embodiment = 'mipo' | 'humanoid' | 'grandtour' | 'tlio' | 'blackbird';
 
-// Training durations only; total dataset durations include held-out recordings.
-// Fill the remaining durations when the training splits are confirmed.
-const trainingDurations: Record<Embodiment, string | null> = {
-  mipo: null,
-  humanoid: '1 h',
-  grandtour: null,
-  tlio: null,
-  blackbird: null,
-};
-
 type Demo = {
   embodiment: Embodiment;
   name: string;
@@ -56,8 +48,8 @@ const demos: Demo[] = [
     logo: '/images/logos/Humanoid_logo.png',
     platform: 'Unitree G1',
     videos: [
-      { src: VIDEOS.humanoidMacvo, poster: '/video/teaser-poster.jpg', label: 'G1–MACVO · 2×', width: 2478, height: 1190 },
-      { src: VIDEOS.humanoidLidar, poster: '/video/G1-LiDAR/ssio-lidar-poster.jpg', label: 'G1–SuperOdom · 8×', width: 2484, height: 1464 },
+      { src: VIDEOS.humanoidMacvo, poster: '/video/teaser-poster.jpg', label: 'MAC-VO reference trajectory', width: 2478, height: 1190 },
+      { src: VIDEOS.humanoidLidar, poster: '/video/G1-LiDAR/ssio-lidar-poster.jpg', label: 'Super Odometry reference trajectory', width: 2484, height: 1464 },
     ],
   },
   {
@@ -123,15 +115,6 @@ const trajectoryGallery: {
   },
 ];
 
-function TrainingDataLabel({ embodiment }: { embodiment: Embodiment }) {
-  const duration = trainingDurations[embodiment];
-  return (
-    <p className='text-sm font-semibold text-primary-700'>
-      Self-supervised{duration ? ` · ${duration} of unlabeled data` : ' · Unlabeled data'}
-    </p>
-  );
-}
-
 type DemoVideo = { demo: Demo; video: Demo['videos'][number] };
 
 function videoPairs(items: DemoVideo[]) {
@@ -149,7 +132,7 @@ function DemoVideoFigure({ demo, video }: DemoVideo) {
         height={video.height}
       />
       {video.src !== null && (
-        <figcaption className='figure-caption'>
+        <figcaption className='figure-caption mt-1'>
           <strong>{demo.platform}.</strong> {video.label}
         </figcaption>
       )}
@@ -158,6 +141,14 @@ function DemoVideoFigure({ demo, video }: DemoVideo) {
 }
 
 export default function HomePage() {
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+
+  useEffect(() => {
+    if (copyStatus !== 'copied') return;
+    const timeout = window.setTimeout(() => setCopyStatus('idle'), 2000);
+    return () => window.clearTimeout(timeout);
+  }, [copyStatus]);
+
   const textColor = 'text-gray-600';
   const bgColor = 'bg-white';
   const maskColor = 'bg-white/75';
@@ -173,7 +164,7 @@ export default function HomePage() {
 }`;
   return (
     <main>
-      <section className={clsx(bgColor, textColor, 'relative flex min-h-screen items-center justify-center overflow-hidden')}>
+      <section className={clsx('bg-black', textColor, 'relative flex min-h-screen flex-col items-center justify-center overflow-hidden')}>
         {VIDEOS.teaser === null ? (
           <img
             src='/images/fig1_corrected_legend.png'
@@ -195,8 +186,8 @@ export default function HomePage() {
           </video>
         )}
         <div className={clsx('pointer-events-none absolute inset-0 z-10', maskColor)} />
-        <div className='layout z-20 relative flex flex-col items-center justify-center px-4 py-12 text-center'>
-          <h1 className='mb-6 mt-4 text-[clamp(1.75rem,8vw,3rem)] leading-[1.15] tracking-tight md:mb-4 md:text-5xl md:leading-none md:tracking-normal'>
+        <div className='layout z-20 relative flex flex-1 flex-col items-center justify-center px-4 py-12 text-center'>
+          <h1 className='mb-6 mt-4 text-[clamp(1.75rem,8vw,3rem)] leading-[1.15] tracking-tight md:mb-4 md:text-5xl md:leading-[1.1]'>
             <span className='whitespace-nowrap'>
               <span className={hlTextColor}>S</span>elf-<span className={hlTextColor}>S</span>upervised
             </span>{' '}
@@ -239,20 +230,19 @@ export default function HomePage() {
               GitHub<span className='hidden md:inline'> Repo</span>
             </ArrowLink>
           </div>
-          <div className='mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs leading-5 text-gray-500 md:mt-6 md:block md:text-sm md:text-gray-600 [&>span]:whitespace-nowrap [&_sup]:mr-0.5 [&_sup]:text-[0.7em]'>
-            <span><sup>1</sup>Amazon FAR</span>{' '}
-            <span><sup>2</sup>Carnegie Mellon University</span>{' '}
-            <span><sup>3</sup>UC Berkeley</span>{' '}
-            <br className='hidden md:block' />
-            <span><sup>4</sup>Stanford University</span>{' '}
-            <span><sup>5</sup>Penn State University</span>
-          </div>
+        </div>
+        <div className='relative z-20 flex w-full flex-wrap justify-start gap-x-5 gap-y-2 px-3 pb-3 text-left text-base leading-relaxed text-gray-700 md:text-lg [&>span]:whitespace-nowrap [&_sup]:mr-1 [&_sup]:text-[0.7em]'>
+          <span><sup>1</sup>Amazon FAR</span>
+          <span><sup>2</sup>Carnegie Mellon University</span>
+          <span><sup>3</sup>UC Berkeley</span>
+          <span><sup>4</sup>Stanford University</span>
+          <span><sup>5</sup>Penn State University</span>
         </div>
       </section>
 
       <section className={clsx(bgColor, textColor)}>
         <div className='layout py-12'>
-          <h2 className='text-center pb-4'>Abstract</h2>
+          <h2 className='text-left pb-4'>Abstract</h2>
           <p className='text-pretty text-base leading-[1.75] md:text-lg md:leading-[1.75]'>
             Learning inertial odometry for a new platform usually requires labeled trajectories.
             We show that an <b>IMU integration teacher</b> can train a velocity model from scratch without velocity or position labels.
@@ -264,7 +254,7 @@ export default function HomePage() {
             Across six datasets spanning pedestrians, drones, quadrupeds, and a humanoid, the same recipe applied unchanged trains inertial odometry comparable to a supervised AirIO baseline.
           </p>
           <figure className='mt-8'>
-            <h3 className='mb-4 text-center text-2xl font-semibold'>
+            <h3 className='mb-4 text-left text-2xl font-semibold'>
               Six Datasets, One Recipe
             </h3>
             <ExpandableImage
@@ -293,8 +283,8 @@ export default function HomePage() {
         <div className='layout py-12'>
           <h2 id='robot-demos-title' className='mb-4'>Self-Supervised Inertial Odometry on Real Robots</h2>
           <p className='pb-6 text-lg'>
-            Learning from unlabeled motion on quadrupeds and a humanoid,
-            without velocity or position labels.
+            All models are self-supervise trained from scratch on unlabeled data, without
+            velocity or position labels.
           </p>
           <div className='grid grid-cols-1 gap-6'>
             {demoCards.map((embodiments) => {
@@ -314,7 +304,6 @@ export default function HomePage() {
                           <h3 className='text-xl text-gray-800'>
                             {demo.name} <span className='font-normal text-gray-500'>· {demo.platform}</span>
                           </h3>
-                          <TrainingDataLabel embodiment={demo.embodiment} />
                         </div>
                       </div>
                     ))}
@@ -345,14 +334,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id='introduction' aria-labelledby='introduction-title' className='bg-dark py-8 text-gray-200'>
+      <section id='introduction' aria-labelledby='introduction-title' className='bg-black py-8 text-gray-200'>
         <div className='layout'>
-          <article className='rounded-2xl border border-white/10 bg-gray-900/50 p-4 shadow-2xl backdrop-blur md:p-6'>
-            <h2 id='introduction-title' className='mb-4 text-center text-2xl font-semibold'>
-              Introduction
-            </h2>
-            <VideoSlot src={VIDEOS.intro} poster='/video/ssio_introduction-poster.jpg' label='SSIO introduction' width={1920} height={1080} />
-          </article>
+          <h2 id='introduction-title' className='mb-4'>
+            Introduction
+          </h2>
+          <VideoSlot src={VIDEOS.intro} poster='/video/ssio_introduction-poster.jpg' label='SSIO introduction' width={1920} height={1080} className='rounded-xl shadow-none' />
         </div>
       </section>
 
@@ -407,18 +394,18 @@ export default function HomePage() {
         className={clsx(bgColor, textColor)}
       >
         <div className='layout py-12'>
-          <h2 id='trajectory-gallery-title' className='mb-4'>Traj Gallery</h2>
-          <p className='text-lg pb-6'>
+          <h2 id='trajectory-gallery-title' className='mb-2'>Trajectory Gallery</h2>
+          <p className='text-lg pb-3'>
             2D trajectories and velocity components compared with ground truth.
             Our models are trained from scratch with <span className={hlTextColor}>no velocity or position labels</span>.
           </p>
           <TabGroup>
-            <TabList aria-label='Trajectory gallery views' className='mb-6 flex flex-wrap gap-2 border-b border-gray-300'>
+            <TabList aria-label='Trajectory gallery views' className='mb-3 flex flex-wrap gap-2 border-b border-gray-300'>
               {['Test sequences', 'Overview figures'].map((view) => (
                 <Tab
                   key={view}
                   className={({ selected }) => clsx(
-                    '-mb-px border-b-2 px-4 py-3 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                    '-mb-px border-b-2 px-4 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
                     selected
                       ? 'border-primary-600 text-primary-700'
                       : 'border-transparent hover:text-primary-600'
@@ -434,7 +421,7 @@ export default function HomePage() {
               </TabPanel>
               <TabPanel>
                 <TabGroup>
-                  <TabList aria-label='Overview datasets' className='mb-6 flex flex-wrap gap-2'>
+                  <TabList aria-label='Overview datasets' className='mb-3 flex flex-wrap gap-2'>
                     {trajectoryGallery.map((item) => (
                       <Tab
                         key={item.embodiment}
@@ -452,12 +439,11 @@ export default function HomePage() {
                   <TabPanels>
                     {trajectoryGallery.map((item) => (
                       <TabPanel key={item.embodiment}>
-                        <figure className='rounded-2xl bg-white p-4 shadow-sm md:p-6'>
-                          <div className='mb-4 flex flex-wrap items-baseline justify-between gap-2'>
+                        <figure className='rounded-2xl bg-white p-3 shadow-sm md:p-4'>
+                          <div className='mb-2 flex flex-wrap items-baseline justify-between gap-2'>
                             <h3 className='text-xl text-gray-800'>
                               {item.name} <span className='font-normal text-gray-500'>· {item.platform}</span>
                             </h3>
-                            <TrainingDataLabel embodiment={item.embodiment} />
                           </div>
                           <ExpandableImage
                             src={item.image}
@@ -482,8 +468,29 @@ export default function HomePage() {
 
       <section className={clsx(bgColor, textColor)}>
         <div className='layout pt-4 pb-48'>
-          <h2 className='mt-12 mb-4'>Citation</h2>
-          <pre className='whitespace-pre-wrap'>{citation_bibtex}</pre>
+          <div className='mt-12 mb-4 flex items-center justify-between gap-3'>
+            <h2>Citation</h2>
+            <button
+              type='button'
+              aria-label='Copy BibTeX citation'
+              title={copyStatus === 'copied' ? 'Copied!' : 'Copy citation'}
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(citation_bibtex);
+                  setCopyStatus('copied');
+                } catch {
+                  setCopyStatus('error');
+                }
+              }}
+              className='flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+            >
+              {copyStatus === 'copied' ? <Check aria-hidden='true' className='h-5 w-5' /> : <Copy aria-hidden='true' className='h-5 w-5' />}
+            </button>
+          </div>
+          <p role='status' className={copyStatus === 'error' ? 'mb-2 text-sm text-red-700' : 'sr-only'}>
+            {copyStatus === 'copied' ? 'Citation copied to clipboard.' : copyStatus === 'error' ? 'Unable to copy. Please select and copy the citation below.' : ''}
+          </p>
+          <pre className='whitespace-pre-wrap text-sm leading-relaxed'>{citation_bibtex}</pre>
         </div>
       </section>
     </main>

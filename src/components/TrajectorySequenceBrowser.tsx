@@ -14,6 +14,8 @@ const totalSequences = trajectoryDatasets.reduce(
 );
 const controlClass =
   'rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold transition hover:border-primary-600 hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-300 disabled:hover:text-inherit';
+const trajectoryCaption =
+  'All sequences shown are test sequences unseen during training, with world-frame velocities computed using ground-truth attitude and trajectories starting at the origin.';
 
 export default function TrajectorySequenceBrowser() {
   const [datasetFilter, setDatasetFilter] = useState('all');
@@ -87,29 +89,46 @@ export default function TrajectorySequenceBrowser() {
 
   return (
     <div>
-      <div role='group' aria-label='Filter trajectory datasets' className='mb-5 flex flex-wrap gap-2'>
-        {[{ id: 'all', name: 'All datasets', count: totalSequences }, ...trajectoryDatasets.map((dataset) => ({
-          id: dataset.id,
-          name: dataset.name,
-          count: dataset.sequences.length,
-        }))].map((dataset) => (
-          <button
-            key={dataset.id}
-            type='button'
-            aria-pressed={datasetFilter === dataset.id}
-            onClick={() => {
-              setDatasetFilter(dataset.id);
-              setSelectedId(null);
-              setAnimated(true);
-            }}
-            className={cn(
-              controlClass,
-              datasetFilter === dataset.id && 'border-primary-600 bg-primary-600 text-white hover:text-white'
-            )}
+      <div className='mb-3 flex items-start justify-between gap-3'>
+        <div role='group' aria-label='Filter trajectory datasets' className='flex min-w-0 flex-1 flex-wrap gap-2'>
+          {[{ id: 'all', name: 'All datasets', count: totalSequences }, ...trajectoryDatasets.map((dataset) => ({
+            id: dataset.id,
+            name: dataset.name,
+            count: dataset.sequences.length,
+          }))].map((dataset) => (
+            <button
+              key={dataset.id}
+              type='button'
+              aria-pressed={datasetFilter === dataset.id}
+              onClick={() => {
+                setDatasetFilter(dataset.id);
+                setSelectedId(null);
+                setAnimated(true);
+              }}
+              className={cn(
+                controlClass,
+                datasetFilter === dataset.id && 'border-primary-600 bg-primary-600 text-white hover:text-white'
+              )}
+            >
+              {dataset.name} <span className='ml-1 font-normal opacity-75'>{dataset.count}</span>
+            </button>
+          ))}
+        </div>
+        <button
+          type='button'
+          role='switch'
+          aria-checked={animated}
+          onClick={() => setAnimated((current) => !current)}
+          className='group flex shrink-0 items-center gap-2 rounded-full py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+        >
+          Animation
+          <span
+            aria-hidden='true'
+            className='inline-flex h-6 w-11 items-center rounded-full bg-gray-400 transition-colors group-aria-checked:bg-primary-600'
           >
-            {dataset.name} <span className='ml-1 font-normal opacity-75'>{dataset.count}</span>
-          </button>
-        ))}
+            <span className='h-4 w-4 translate-x-1 rounded-full bg-white transition-transform group-aria-checked:translate-x-6' />
+          </span>
+        </button>
       </div>
 
       {isMobile ? (
@@ -125,27 +144,16 @@ export default function TrajectorySequenceBrowser() {
             placeholder='Search name or dataset'
             className='w-full rounded-lg border-gray-300 text-sm focus:border-primary-600 focus:ring-primary-600'
           />
-          <div className='my-4 flex flex-wrap items-center justify-between gap-3'>
-            <p role='status' className='text-sm text-gray-500'>
-              {sequences.length} of {totalSequences} sequences · scroll to explore
-            </p>
-            <button type='button' onClick={() => setAnimated(!animated)} className={controlClass}>
-              {animated ? 'Show final frames' : 'Play animations'}
-            </button>
-          </div>
-          <p className='mb-6 text-xs leading-relaxed text-gray-500'>
-            World-frame velocities use ground-truth attitude; trajectories start at the origin.
-          </p>
-          <div className='space-y-8'>
+          <div className='mt-3 space-y-5'>
             {groups.map((dataset) => (
               <section key={dataset.id} aria-label={`${dataset.name} test sequences`}>
-                <h3 className='mb-4 text-lg text-gray-800'>
+                <h3 className='mb-2 text-lg text-gray-800'>
                   {dataset.name}{' '}
                   <span className='text-sm font-normal text-gray-500'>
                     {dataset.sequences.length} {dataset.sequences.length === 1 ? 'sequence' : 'sequences'}
                   </span>
                 </h3>
-                <div className='space-y-5'>
+                <div className='space-y-3'>
                   {dataset.sequences.map((sequence) => (
                     <TrajectoryCard
                       key={sequence.id}
@@ -175,12 +183,13 @@ export default function TrajectorySequenceBrowser() {
           )}
         </div>
       ) : (
-      <div className='grid grid-cols-[15rem_minmax(0,1fr)] items-start gap-6'>
+      <div className='grid grid-cols-[15rem_minmax(0,1fr)] items-start gap-x-3 gap-y-2'>
+        {/* Let the preview set the row height; keep the sequence list scrollable. */}
         <aside
           aria-label='Trajectory sequence selector'
-          className='flex h-72 min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white lg:h-[34rem]'
+          className='flex min-h-0 min-w-0 flex-col self-stretch overflow-hidden rounded-2xl border border-gray-200 bg-white [contain:size]'
         >
-          <div className='border-b border-gray-200 p-4'>
+          <div className='border-b border-gray-200 p-3'>
             <label htmlFor='trajectory-sequence-search' className='mb-2 block font-semibold text-gray-800'>
               Browse sequences
             </label>
@@ -197,9 +206,6 @@ export default function TrajectorySequenceBrowser() {
               aria-controls='trajectory-sequence-list'
               className='w-full min-w-0 rounded-lg border-gray-300 text-sm focus:border-primary-600 focus:ring-primary-600'
             />
-            <p role='status' className='mt-2 text-xs text-gray-500'>
-              {sequences.length} of {totalSequences} sequences · scroll to browse
-            </p>
           </div>
           <nav
             id='trajectory-sequence-list'
@@ -247,38 +253,35 @@ export default function TrajectorySequenceBrowser() {
         <div id='trajectory-sequence-preview' className='min-w-0'>
           {selected ? (
             <>
-              <div className='mb-4 flex flex-wrap items-center justify-between gap-3'>
-                <p role='status' className='text-sm text-gray-500'>
-                  Sequence {selectedIndex + 1} of {sequences.length} · {selected.datasetName}
-                </p>
-                <div className='flex gap-2'>
-                  <button
-                    type='button'
-                    aria-label='Previous sequence'
-                    disabled={selectedIndex === 0}
-                    onClick={() => selectSequence(sequences[selectedIndex - 1].id)}
-                    className={controlClass}
-                  >
-                    ← Previous
-                  </button>
-                  <button
-                    type='button'
-                    aria-label='Next sequence'
-                    disabled={selectedIndex === sequences.length - 1}
-                    onClick={() => selectSequence(sequences[selectedIndex + 1].id)}
-                    className={controlClass}
-                  >
-                    Next →
-                  </button>
-                </div>
-              </div>
               <figure className='overflow-hidden rounded-2xl border border-gray-200 bg-white'>
-                <div className='border-b border-gray-100 px-4 py-3'>
-                  <h3 className='text-base font-semibold text-gray-800 [overflow-wrap:anywhere]'>
+                <div className='flex items-center justify-between gap-3 border-b border-gray-100 px-3 py-2'>
+                  <h3 className='min-w-0 text-base font-semibold text-gray-800 [overflow-wrap:anywhere]'>
+                    <span className='text-primary-700'>{selected.datasetName}</span>
+                    <span className='font-normal text-gray-400'> · </span>
                     {selected.name}
                   </h3>
+                  <div className='flex shrink-0 gap-2'>
+                    <button
+                      type='button'
+                      aria-label='Previous sequence'
+                      disabled={selectedIndex === 0}
+                      onClick={() => selectSequence(sequences[selectedIndex - 1].id)}
+                      className={controlClass}
+                    >
+                      ← Previous
+                    </button>
+                    <button
+                      type='button'
+                      aria-label='Next sequence'
+                      disabled={selectedIndex === sequences.length - 1}
+                      onClick={() => selectSequence(sequences[selectedIndex + 1].id)}
+                      className={controlClass}
+                    >
+                      Next →
+                    </button>
+                  </div>
                 </div>
-                <div className='px-4 pt-4'>
+                <div className='px-3 pt-2'>
                   <ExpandableImage
                     src={animated ? selected.animation : selected.poster}
                     expandedSrc={selected.poster}
@@ -288,32 +291,10 @@ export default function TrajectorySequenceBrowser() {
                     height={selected.height}
                   />
                 </div>
-                <figcaption className='figure-caption px-4 pb-4'>
-                  <strong>Self-supervised and supervised predictions.</strong>{' '}
-                  SSIO and AirIO are compared with ground truth on this test sequence.
+                <figcaption className='figure-caption mt-2 px-3 pb-2'>
+                  {trajectoryCaption}
                 </figcaption>
-                <div className='flex flex-wrap items-center gap-3 border-t border-gray-100 p-4'>
-                  <button
-                    type='button'
-                    aria-pressed={animated}
-                    onClick={() => setAnimated(!animated)}
-                    className={controlClass}
-                  >
-                    {animated ? 'Show final frame' : 'Play animation'}
-                  </button>
-                  <a
-                    href={selected.poster}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-sm font-semibold text-primary-700 underline underline-offset-4'
-                  >
-                    Open full size ↗
-                  </a>
-                </div>
               </figure>
-              <p className='mt-3 text-xs text-gray-500'>
-                World-frame velocities use ground-truth attitude; trajectories start at the origin.
-              </p>
             </>
           ) : (
             <div className='rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center'>
@@ -366,7 +347,7 @@ function TrajectoryCard({
 
   return (
     <figure ref={ref} className='rounded-xl border border-gray-200 bg-white p-3 sm:p-4'>
-      <h4 className='mb-3 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere]'>
+      <h4 className='mb-2 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere]'>
         {sequence.name}
       </h4>
       <ExpandableImage
@@ -377,9 +358,8 @@ function TrajectoryCard({
         width={sequence.width}
         height={sequence.height}
       />
-      <figcaption className='figure-caption'>
-        <strong>{datasetName}.</strong>{' '}
-        Ground truth, supervised AirIO, and self-supervised SSIO.
+      <figcaption className='figure-caption mt-2'>
+        {trajectoryCaption}
       </figcaption>
     </figure>
   );
