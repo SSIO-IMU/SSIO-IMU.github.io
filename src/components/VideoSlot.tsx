@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import React from 'react';
+
+import { cn } from '@/lib/utils';
 
 type VideoSlotProp = {
   // null renders a placeholder box; set a /video/... path once the clip exists.
@@ -16,7 +17,7 @@ const VideoSlot = ({ src, label, poster, width, height, className, controls = tr
   if (src === null) {
     return (
       <div
-        className={clsx(
+        className={cn(
           'flex aspect-video w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-400/60 bg-gray-500/10 text-center',
           className
         )}
@@ -38,7 +39,7 @@ const VideoSlot = ({ src, label, poster, width, height, className, controls = tr
       preload='metadata'
       width={width}
       height={height}
-      className={clsx('mx-auto h-auto w-full rounded-md shadow-sm', className)}
+      className={cn('mx-auto h-auto w-full rounded-md shadow-sm', className)}
     >
       <source src={src} type='video/mp4' />
       Your browser does not support the video tag.

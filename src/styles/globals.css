@@ -35,7 +35,7 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 100 900;
-    font-display: block;
+    font-display: swap;
     src: url('/fonts/inter-var-latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
       U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
@@ -48,32 +48,38 @@
 
   /* #region  /**=========== Typography =========== */
   .h0 {
-    @apply font-primary text-3xl font-bold md:text-5xl;
+    @apply font-primary text-3xl font-semibold tracking-tight md:text-5xl;
   }
 
   h1,
   .h1 {
-    @apply font-primary text-2xl font-bold md:text-4xl;
+    @apply font-primary text-2xl font-semibold tracking-tight md:text-4xl;
   }
 
   h2,
   .h2 {
-    @apply font-primary text-xl font-bold md:text-3xl;
+    @apply font-primary text-xl font-semibold leading-tight tracking-tight md:text-[1.75rem];
   }
 
   h3,
   .h3 {
-    @apply font-primary text-lg font-bold md:text-2xl;
+    @apply font-primary text-lg font-semibold leading-snug tracking-[-0.015em] md:text-xl;
   }
 
   h4,
   .h4 {
-    @apply font-primary text-base font-bold md:text-lg;
+    @apply font-primary text-base font-medium leading-snug md:text-lg;
   }
 
   body,
   .p {
-    @apply font-primary text-sm md:text-base;
+    @apply font-primary text-base font-normal leading-relaxed antialiased;
+    font-kerning: normal;
+  }
+
+  b,
+  strong {
+    @apply font-semibold;
   }
   /* #endregion  /**======== Typography =========== */
 

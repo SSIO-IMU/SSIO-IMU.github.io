@@ -31,16 +31,7 @@ export default function ExpandableImage({
 
   return (
     <>
-      <button
-        type='button'
-        aria-label={`Enlarge ${title}`}
-        aria-haspopup='dialog'
-        onClick={() => {
-          setZoomed(false);
-          setOpen(true);
-        }}
-        className='group block w-full cursor-zoom-in rounded-md text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600'
-      >
+      <div className='group relative w-full'>
         <img
           src={src}
           alt={alt}
@@ -50,11 +41,20 @@ export default function ExpandableImage({
           decoding='async'
           className={cn('h-auto w-full rounded-md', imageClassName)}
         />
-        <span aria-hidden='true' className='mt-2 flex items-center justify-end gap-1.5 text-xs font-medium text-primary-700 group-hover:underline'>
-          <Expand className='h-3.5 w-3.5' />
-          Enlarge figure
-        </span>
-      </button>
+        <button
+          type='button'
+          aria-label={`Enlarge ${title}`}
+          aria-haspopup='dialog'
+          title='Enlarge figure'
+          onClick={() => {
+            setZoomed(false);
+            setOpen(true);
+          }}
+          className='pointer-events-none absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white/90 text-gray-700 opacity-0 shadow-sm transition group-hover:pointer-events-auto group-hover:opacity-100 hover:bg-white hover:text-primary-700 focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100'
+        >
+          <Expand aria-hidden='true' className='h-5 w-5' />
+        </button>
+      </div>
 
       <Dialog open={open} onClose={setOpen} initialFocus={closeRef} className='relative z-50'>
         <DialogBackdrop className='fixed inset-0 bg-gray-950/75' />

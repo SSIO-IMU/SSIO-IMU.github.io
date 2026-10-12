@@ -1,15 +1,12 @@
 'use client';
 
-import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import ExpandableImage from '@/components/ExpandableImage';
 
 export default function TLIOScaling() {
-  const [mode, setMode] = useState<'day' | 'night'>('day');
   const [animated, setAnimated] = useState(true);
-  const isNight = mode === 'night';
-  const imagePath = `/images/scaling/tlio-scaling-${mode}`;
+  const imagePath = '/images/scaling/tlio-scaling-day';
 
   useEffect(() => {
     setAnimated(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -19,39 +16,28 @@ export default function TLIOScaling() {
     <section
       id='tlio-scaling'
       aria-labelledby='tlio-scaling-title'
-      className={clsx(
-        'border-t',
-        isNight ? 'border-gray-800 bg-black text-gray-200' : 'border-gray-200 bg-white text-gray-600'
-      )}
+      className='border-t border-gray-200 bg-white text-gray-600'
     >
       <div className='layout py-12'>
-        <div className='flex flex-wrap items-center justify-between gap-4 pb-4'>
-          <h2 id='tlio-scaling-title' className={isNight ? 'text-gray-100' : 'text-gray-800'}>
+        <div className='flex items-center justify-between gap-4 pb-4'>
+          <h2 id='tlio-scaling-title' className='min-w-0'>
             <span className='text-primary-600'>Finding 1:</span> Accuracy scales with unlabeled data
           </h2>
-          <div
-            role='group'
-            aria-label='Scaling visualization color mode'
-            className={clsx(
-              'flex rounded-full border p-1',
-              isNight ? 'border-gray-600' : 'border-gray-300'
-            )}
+          <button
+            type='button'
+            role='switch'
+            aria-checked={animated}
+            onClick={() => setAnimated((current) => !current)}
+            className='group flex shrink-0 items-center gap-2 rounded-full py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
           >
-            {(['day', 'night'] as const).map((option) => (
-              <button
-                key={option}
-                type='button'
-                aria-pressed={mode === option}
-                onClick={() => setMode(option)}
-                className={clsx(
-                  'rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
-                  mode === option && 'bg-primary-600 text-white'
-                )}
-              >
-                {option === 'day' ? 'Day mode' : 'Night mode'}
-              </button>
-            ))}
-          </div>
+            Animation
+            <span
+              aria-hidden='true'
+              className='inline-flex h-6 w-11 items-center rounded-full bg-gray-400 transition-colors group-aria-checked:bg-primary-600'
+            >
+              <span className='h-4 w-4 translate-x-1 rounded-full bg-white transition-transform group-aria-checked:translate-x-6' />
+            </span>
+          </button>
         </div>
         <p className='pb-6 text-lg'>
           Held-out velocity error improves steadily as the unlabeled TLIO data
@@ -66,25 +52,15 @@ export default function TLIOScaling() {
             title='Scaling with unlabeled TLIO data'
             width={1600}
             height={620}
-            imageClassName={isNight ? 'bg-black' : 'bg-white'}
+            imageClassName='bg-white'
           />
-          <figcaption className={clsx('figure-caption', isNight && 'text-gray-300 [&_strong]:text-gray-100')}>
+          <figcaption className='figure-caption'>
             <strong>Eight data pools share the same training-step budget.</strong>{' '}
             Left: test average velocity error during training, with a supervised
             reference. Right: one held-out test trajectory using each pool&apos;s
             validation-selected model. Each data pool appears in turn.
           </figcaption>
         </figure>
-        <button
-          type='button'
-          onClick={() => setAnimated(!animated)}
-          className={clsx(
-            'mt-4 rounded-full border px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
-            isNight ? 'border-gray-600' : 'border-gray-300'
-          )}
-        >
-          {animated ? 'Show final frame' : 'Play animation'}
-        </button>
       </div>
     </section>
   );
