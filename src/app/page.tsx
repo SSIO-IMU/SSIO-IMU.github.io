@@ -319,7 +319,7 @@ export default function HomePage() {
         <div className='layout py-12'>
           <h2 id='robot-demos-title' className='mb-4'>Self-Supervised Inertial Odometry on Real Robots</h2>
           <p className='pb-6 text-lg'>
-            All models are self-supervise trained from scratch on unlabeled data, without
+            All models are trained from scratch with self-supervision on unlabeled data, without
             velocity or position labels.
           </p>
           <div className='grid grid-cols-1 gap-6'>
