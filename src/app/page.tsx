@@ -18,7 +18,7 @@ import VideoSlot from '@/components/VideoSlot';
 
 // Video paths under public/. null renders a placeholder; set the path once the mp4 exists.
 const VIDEOS = {
-  teaser: '/video/teaser.mp4',
+  teaser: '/video/teaser-hero.mp4',
   intro: '/video/ssio_introduction.mp4',
   humanoidMacvo: '/video/teaser.mp4',
   humanoidLidar: '/video/G1-LiDAR/ssio-lidar-8x.mp4',
@@ -196,6 +196,7 @@ export default function HomePage() {
   const citation_bibtex = `@article{qiu2026ssio,
       title={Self-Supervised Inertial Odometry},
       author={Yuheng Qiu and Yutian Chen and Carlton Cort and Weison Huang and Shibo Zhao and Pieter Abbeel and Rocky Duan and Koushil Sreenath and C. Karen Liu and Carmelo Sferrazza and Junyi Geng and Sebastian Scherer and Guanya Shi},
+      journal={arXiv preprint arXiv:2610.25988},
       year={2026},
 }`;
   return (
@@ -251,14 +252,10 @@ export default function HomePage() {
             </div>
           </div>
           <div className='grid w-full max-w-sm grid-cols-2 gap-3 md:flex md:max-w-none md:justify-center md:gap-8'>
-            {/* TODO: point at the arXiv abstract once it is public. */}
-            <ArrowLink className={resourceLinkClass} href='#' variant='light' size='large' icon={
+            <ArrowLink className={resourceLinkClass} href='https://arxiv.org/abs/2610.25988' variant='light' size='large' icon={
               <img src='/svg/arxiv.svg' alt='arXiv logo' className={linkIconClass} loading='lazy' />
             }>
-              arXiv{' '}
-              <span className='block text-[11px] font-normal leading-tight text-gray-500 md:inline md:text-lg md:font-medium md:leading-normal md:text-inherit'>
-                <span className='hidden md:inline'>(</span>coming soon<span className='hidden md:inline'>)</span>
-              </span>
+              arXiv
             </ArrowLink>
             <ArrowLink className={resourceLinkClass} href='https://github.com/SSIO-IMU' variant='light' size='large' icon={
               <img src='/svg/github.svg' alt='GitHub logo' className={linkIconClass} loading='lazy' />

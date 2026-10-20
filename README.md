@@ -168,5 +168,4 @@ TLIO sequence `263070267597787`, although it remains in the source manifest.
 
 ## TODO
 
-- arXiv button in the hero points to `#`.
 - Only some author names link to homepages.
